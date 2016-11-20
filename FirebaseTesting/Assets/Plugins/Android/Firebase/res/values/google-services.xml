@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="firebase_database_url" translatable="false">https://bark-11fd5.firebaseio.com</string>
+  <string name="gcm_defaultSenderId" translatable="false">1076545048399</string>
+  <string name="google_api_key" translatable="false">AIzaSyCJT5PQKSUdXePLpwNGx0FKhPCVFfSl4kk</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCJT5PQKSUdXePLpwNGx0FKhPCVFfSl4kk</string>
+  <string name="google_app_id" translatable="false">1:1076545048399:android:f95dcdc5024477f6</string>
+</resources>

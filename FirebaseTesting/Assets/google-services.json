@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1076545048399",
+    "firebase_url": "https://bark-11fd5.firebaseio.com",
+    "project_id": "bark-11fd5",
+    "storage_bucket": "bark-11fd5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076545048399:android:f95dcdc5024477f6",
+        "android_client_info": {
+          "package_name": "com.BarkerStreet.AGI_Vuforia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1076545048399-to67srr76p8mashk7tbq9ggikldhabc0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJT5PQKSUdXePLpwNGx0FKhPCVFfSl4kk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
