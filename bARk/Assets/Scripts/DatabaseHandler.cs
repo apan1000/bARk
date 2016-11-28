@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using Firebase;
 using Firebase.Database;
 using Firebase.Unity.Editor;
+using System.Threading.Tasks;
 
 // Firebase can only be accessed when running the application on a phone
 // Error will occur if you try to access it in play mode
 public class DatabaseHandler : MonoBehaviour
 {
     public Text info;
+    public Button[] buttons;
 
     private DatabaseReference databaseRef;
 
@@ -77,18 +79,26 @@ public class DatabaseHandler : MonoBehaviour
     // Log in with email and password
     public void LoginUserWithEmail()
     {
-        auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(
-            task => {
-                if (task.IsCompleted && !task.IsCanceled && !task.IsFaulted)
-                {
-                    user = auth.CurrentUser;
-                    info.text = "User Login";
-                }
-                else
-                {
-                    info.text = "Login failed";
-                }
-            });
+        DisableUI();
+        info.text = "LOGIN START";
+        auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(SignInHandler);
+    }
+
+    void SignInHandler(Task<Firebase.Auth.FirebaseUser> authTask)
+    {
+        if (authTask.IsCanceled)
+            info.text = "Task was canceled.";
+        else if (authTask.IsFaulted)
+            info.text = "Task faulted.";
+        else if (authTask.IsCompleted)
+        {
+            info.text = "Sign in completed.";
+            if(auth.CurrentUser != null)
+            {
+                info.text = "Current user:\n" + auth.CurrentUser.Email;
+            }
+        }
+        EnableUI();
     }
 
     public void CreateUserWithEmail()
@@ -108,6 +118,18 @@ public class DatabaseHandler : MonoBehaviour
                 if (task.IsCanceled) { info.text = "Task canceled!!"; }
                 if (task.IsFaulted) { info.text = "Task faulted!!"; }
             });
+    }
+
+
+    void DisableUI()
+    {
+        foreach (Button b in buttons)
+            b.interactable = false;
+    }
+    void EnableUI()
+    {
+        foreach (Button b in buttons)
+            b.interactable = true;
     }
 }
 
