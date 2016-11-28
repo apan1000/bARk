@@ -36,7 +36,7 @@ public class LTree
 		{
 			LTree child = new LTree();
 			branches.Add(child);
-			child.construct(progenitor,new_length,new_radius);
+			child.construct(null, progenitor, new_length, new_radius);
 		}
 
 	}
@@ -44,7 +44,7 @@ public class LTree
 	public void pivot()
 	{
 
-		contents.transform.Rotate(0,.1f,0);
+		contents.transform.Rotate(0,.2f,0);
 	}
 
 	public void do_rotate(float amt)
@@ -61,15 +61,22 @@ public class LTree
 	{
 		GameObject.Destroy(contents);
 		branches = new List<LTree>();
-		construct(null, l,r);
+		construct(null, null, l,r);
 	}
 
-	public void construct(GameObject parentTree, float length, float radius)
+	public void construct(Transform main, GameObject parentTree, float length, float radius)
 	{
 		contents = new GameObject();
 		appearance = GameObject.CreatePrimitive(LTreeController.limbType);
-		if(parentTree!=null)  contents.transform.parent = parentTree.transform;
-		contents.transform.localPosition = new Vector3(0,0,0);
+
+		if (parentTree != null) {
+			contents.transform.parent = parentTree.transform;
+			contents.transform.localPosition = new Vector3 (0, 0, 0);
+		} else {
+			if(main != null)
+			contents.transform.localPosition = main.localPosition;
+		}
+
 		contents.transform.localEulerAngles= new Vector3(0,0,0);
 		appearance.transform.parent = contents.transform;
 		appearance.transform.localPosition = new Vector3(0,0,0);
@@ -101,7 +108,7 @@ public class LTreeController : MonoBehaviour {
 
 	void Start () {
 		rootNode = new LTree();
-		rootNode.construct(null,initial_length,initial_radius);
+		rootNode.construct(transform, null,initial_length,initial_radius);
 
 	}
 	/*
@@ -153,12 +160,12 @@ public class LTreeController : MonoBehaviour {
 			rootNode.reset(initial_length,initial_radius);
 		}
 	}
-
+	*/
 
 	// Update is called once per frame
 	void Update () {
-
+		rootNode.pivot();
 	}
-	*/
+
 
 }
