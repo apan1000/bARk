@@ -71,12 +71,12 @@ public class LTree
 
 		if (parentTree != null) {
 			contents.transform.parent = parentTree.transform;
-			contents.transform.localPosition = new Vector3 (0, 0, 0);
 		} else {
-			if(main != null)
-			contents.transform.localPosition = main.localPosition;
+			if (main != null) {
+				contents.transform.parent = main;
+			}
 		}
-
+		contents.transform.localPosition = new Vector3 (0, 0, 0);
 		contents.transform.localEulerAngles= new Vector3(0,0,0);
 		appearance.transform.parent = contents.transform;
 		appearance.transform.localPosition = new Vector3(0,0,0);
@@ -164,6 +164,8 @@ public class LTreeController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		t++;
+		rootNode.do_rotate(0.1f*Mathf.Cos(0.03f*t));
 		rootNode.pivot();
 	}
 
