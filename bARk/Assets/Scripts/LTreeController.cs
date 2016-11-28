@@ -5,21 +5,23 @@ using System.IO;
 using System;
 using Vuforia;
 
-
-public class LTree: ITrackableEventHandler
+public class LTree
 {
+    #region PRIVATE_MEMBER_VARIABLES
     private List<LTree> branches;
     private GameObject contents;
     private GameObject appearance;
     private LTree lParent;
-    private bool isTracking;
+    #endregion
 
+    #region PUBLIC_MEMBER_VARIABLES
     public float length_decay = 0.8f;
     public float radius_decay = 0.7f;
     public float angle_deviation = 0.3f;
     public float minimum_branches = 1;
     public float maximum_branches = 3;
     public float minimum_radius = 0.1f;
+    #endregion
 
     void createChildren()
     {
@@ -42,7 +44,6 @@ public class LTree: ITrackableEventHandler
             branches.Add(child);
             child.construct(null, progenitor, new_length, new_radius);
         }
-
     }
 
     public void pivot()
@@ -94,8 +95,10 @@ public class LTree: ITrackableEventHandler
 		Vector3 scaleVector = new Vector3(radius, length, radius);
 		appearance.transform.localScale = scaleVector;
 		appearance.transform.Translate(0,0.5f*LTreeController.yScale*length,0);
-		createChildren();
+        
+        createChildren();
 	}
+
 
 	public IEnumerator grow()
 	{
@@ -118,7 +121,48 @@ public class LTree: ITrackableEventHandler
 		}
 
 	}
+}
 
+
+public class LTreeController : MonoBehaviour, ITrackableEventHandler
+{
+
+    /*
+    the LTree is an L-System-based tree object that creates a tree structure from simple rules.
+    */
+    public float initial_length = 1;
+    public static PrimitiveType limbType = PrimitiveType.Cube;
+    public static float yScale = 1f;
+    public float initial_radius = 0.1f;
+    public bool isTracking;
+
+    private int t = 0;
+    private LTree rootNode;
+    
+    private TrackableBehaviour mTrackableBehaviour;
+
+    void Start()
+    {
+        rootNode = new LTree();
+		rootNode.construct(transform, null, initial_length, initial_radius);
+		//StartCoroutine (rootNode.grow ());
+
+        mTrackableBehaviour = transform.parent.GetComponent<TrackableBehaviour>();
+        if (mTrackableBehaviour)
+        {
+            mTrackableBehaviour.RegisterTrackableEventHandler(this);
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+		
+        t++;
+        rootNode.do_rotate(0.1f * Mathf.Cos(0.03f * t));
+        
+        //rootNode.pivot();
+    }
 
     /// <summary>
     /// Implementation of the ITrackableEventHandler function called when the
@@ -138,39 +182,6 @@ public class LTree: ITrackableEventHandler
         {
             isTracking = false;
         }
-    }
-}
-
-
-public class LTreeController : MonoBehaviour
-{
-
-    /*
-    the LTree is an L-System-based tree object that creates a tree structure from simple rules.
-    */
-    private int t = 0;
-    public float initial_length = 1;
-    public float initial_radius = 0.1f;
-    private LTree rootNode;
-    public static PrimitiveType limbType = PrimitiveType.Cube;
-    public static float yScale = 1f;
-
-    void Start()
-    {
-        rootNode = new LTree();
-		rootNode.construct(transform, null, initial_length, initial_radius);
-		//StartCoroutine (rootNode.grow ());
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-		
-        t++;
-        rootNode.do_rotate(0.1f * Mathf.Cos(0.03f * t));
-        
-        //rootNode.pivot();
     }
 }
 
