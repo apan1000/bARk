@@ -5,21 +5,36 @@ using System.IO;
 using System;
 using Vuforia;
 
-
-public class LTree: ITrackableEventHandler
+public class LTree: MonoBehaviour, ITrackableEventHandler
 {
+    #region PRIVATE_MEMBER_VARIABLES
     private List<LTree> branches;
     private GameObject contents;
     private GameObject appearance;
     private LTree lParent;
     private bool isTracking;
+    private TrackableBehaviour mTrackableBehaviour;
+    #endregion
 
+    #region PUBLIC_MEMBER_VARIABLES
     public float length_decay = 0.8f;
     public float radius_decay = 0.7f;
     public float angle_deviation = 0.3f;
     public float minimum_branches = 1;
     public float maximum_branches = 3;
     public float minimum_radius = 0.1f;
+    #endregion
+
+    #region UNTIY_MONOBEHAVIOUR_METHODS
+    void Start()
+    {
+        mTrackableBehaviour = transform.parent.GetComponent<TrackableBehaviour>();
+        if (mTrackableBehaviour)
+        {
+            mTrackableBehaviour.RegisterTrackableEventHandler(this);
+        }
+    }
+    #endregion // UNTIY_MONOBEHAVIOUR_METHODS
 
     void createChildren()
     {
@@ -42,12 +57,10 @@ public class LTree: ITrackableEventHandler
             branches.Add(child);
             child.construct(null, progenitor, new_length, new_radius);
         }
-
     }
 
     public void pivot()
     {
-
         contents.transform.Rotate(0, .2f, 0);
     }
 
