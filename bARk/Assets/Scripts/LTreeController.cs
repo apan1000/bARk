@@ -5,15 +5,13 @@ using System.IO;
 using System;
 using Vuforia;
 
-public class LTree: MonoBehaviour, ITrackableEventHandler
+public class LTree
 {
     #region PRIVATE_MEMBER_VARIABLES
     private List<LTree> branches;
     private GameObject contents;
     private GameObject appearance;
     private LTree lParent;
-    private bool isTracking;
-    private TrackableBehaviour mTrackableBehaviour;
     #endregion
 
     #region PUBLIC_MEMBER_VARIABLES
@@ -24,17 +22,6 @@ public class LTree: MonoBehaviour, ITrackableEventHandler
     public float maximum_branches = 3;
     public float minimum_radius = 0.1f;
     #endregion
-
-    #region UNTIY_MONOBEHAVIOUR_METHODS
-    void Start()
-    {
-        mTrackableBehaviour = transform.parent.GetComponent<TrackableBehaviour>();
-        if (mTrackableBehaviour)
-        {
-            mTrackableBehaviour.RegisterTrackableEventHandler(this);
-        }
-    }
-    #endregion // UNTIY_MONOBEHAVIOUR_METHODS
 
     void createChildren()
     {
@@ -108,50 +95,41 @@ public class LTree: MonoBehaviour, ITrackableEventHandler
 		Vector3 scaleVector = new Vector3(radius, length, radius);
 		appearance.transform.localScale = scaleVector;
 		appearance.transform.Translate(0,0.5f*LTreeController.yScale*length,0);
-		createChildren();
+        
+        createChildren();
 	}
-
-    /// <summary>
-    /// Implementation of the ITrackableEventHandler function called when the
-    /// tracking state changes.
-    /// </summary>
-    public void OnTrackableStateChanged(
-                                    TrackableBehaviour.Status previousStatus,
-                                    TrackableBehaviour.Status newStatus)
-    {
-        if (newStatus == TrackableBehaviour.Status.DETECTED ||
-            newStatus == TrackableBehaviour.Status.TRACKED ||
-            newStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)
-        {
-            isTracking = true;
-        }
-        else
-        {
-            isTracking = false;
-        }
-    }
 }
 
 
-public class LTreeController : MonoBehaviour
+public class LTreeController : MonoBehaviour, ITrackableEventHandler
 {
 
     /*
     the LTree is an L-System-based tree object that creates a tree structure from simple rules.
     */
-    private int t = 0;
     public float initial_length = 1;
-    public float initial_radius = 0.1f;
-    private LTree rootNode;
     public static PrimitiveType limbType = PrimitiveType.Cube;
     public static float yScale = 1f;
+    public float initial_radius = 0.1f;
+    public bool isTracking;
+
+    private int t = 0;
+    private LTree rootNode;
+    
+    private TrackableBehaviour mTrackableBehaviour;
 
     void Start()
     {
         rootNode = new LTree();
         rootNode.construct(transform, null, initial_length, initial_radius);
 
+        mTrackableBehaviour = transform.parent.GetComponent<TrackableBehaviour>();
+        if (mTrackableBehaviour)
+        {
+            mTrackableBehaviour.RegisterTrackableEventHandler(this);
+        }
     }
+
     /*
     void OnGUI()
     {
@@ -209,6 +187,26 @@ public class LTreeController : MonoBehaviour
         t++;
         rootNode.do_rotate(0.1f * Mathf.Cos(0.03f * t));
         rootNode.pivot();
+    }
+
+    /// <summary>
+    /// Implementation of the ITrackableEventHandler function called when the
+    /// tracking state changes.
+    /// </summary>
+    public void OnTrackableStateChanged(
+                                    TrackableBehaviour.Status previousStatus,
+                                    TrackableBehaviour.Status newStatus)
+    {
+        if (newStatus == TrackableBehaviour.Status.DETECTED ||
+            newStatus == TrackableBehaviour.Status.TRACKED ||
+            newStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)
+        {
+            isTracking = true;
+        }
+        else
+        {
+            isTracking = false;
+        }
     }
 }
 
