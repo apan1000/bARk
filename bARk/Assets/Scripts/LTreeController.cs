@@ -104,7 +104,7 @@ public class LTreeController : MonoBehaviour {
 		rootNode.construct(null,initial_length,initial_radius);
 
 	}
-
+	/*
 	void OnGUI()
 	{
 		t++;
@@ -159,4 +159,6 @@ public class LTreeController : MonoBehaviour {
 	void Update () {
 
 	}
+	*/
+
 }
