@@ -47,7 +47,6 @@ public class LTree: ITrackableEventHandler
 
     public void pivot()
     {
-
         contents.transform.Rotate(0, .2f, 0);
     }
 
@@ -98,6 +97,29 @@ public class LTree: ITrackableEventHandler
 		createChildren();
 	}
 
+	public IEnumerator grow()
+	{
+		float percent = 0;
+
+		while (percent < 1) {
+
+			for (int i = 0; i < branches.Count; i++) {
+				branches [i].do_rotate(0.1f * Mathf.Cos(0.03f * percent));
+				//branches [i].appearance.transform.localPosition = new Vector3 (0, 0.5f * LTreeController.yScale * percent, 0);
+			}
+			/*
+			Vector3 scaleVector = new Vector3(radius, length* percent, radius);
+			appearance.transform.localScale = scaleVector;
+			appearance.transform.localPosition = new Vector3 (0, 0.5f * LTreeController.yScale * length * percent, 0);
+			//appearance.transform.Translate(0,0.5f*LTreeController.yScale*length*percent,0);
+				*/
+			percent += 0.02f;
+			yield return null;
+		}
+
+	}
+
+
     /// <summary>
     /// Implementation of the ITrackableEventHandler function called when the
     /// tracking state changes.
@@ -136,66 +158,19 @@ public class LTreeController : MonoBehaviour
     void Start()
     {
         rootNode = new LTree();
-        rootNode.construct(transform, null, initial_length, initial_radius);
+		rootNode.construct(transform, null, initial_length, initial_radius);
+		//StartCoroutine (rootNode.grow ());
 
     }
-    /*
-    void OnGUI()
-    {
-        t++;
-        rootNode.do_rotate(0.1f*Mathf.Cos(0.03f*t));
-        rootNode.pivot();
-        if (GUI.Button(new Rect(10,70,100,20), "reset")) {
-            rootNode.reset(initial_length,initial_radius);
-        }
-        if (GUI.Button(new Rect(10,90,100,20), "Cubes")) {
-            limbType = PrimitiveType.Cube;
-            yScale = 1;
-            rootNode.reset(initial_length,initial_radius);
-        }
-        if (GUI.Button(new Rect(10,110,100,20), "Cylinders")) {
-            limbType = PrimitiveType.Cylinder;
-            yScale = 2;
-            rootNode.reset(initial_length,initial_radius);
-        }
-        if (GUI.Button(new Rect(10,130,100,20), "Capsules")) {
-            limbType = PrimitiveType.Capsule;
-            yScale = 2;
-            rootNode.reset(initial_length,initial_radius);
-        }
-        //------
-
-        GUI.Label (new Rect (10, 150, 200, 20), "Start length:"+(Mathf.Round(initial_length*100)/100));
-
-        if (GUI.Button(new Rect(10,170,50,20), "-")) {
-            initial_length*=0.9f;
-            rootNode.reset(initial_length,initial_radius);
-        }
-        if (GUI.Button(new Rect(60,170,50,20), "+")) {
-            initial_length/=0.9f;
-            rootNode.reset(initial_length,initial_radius);
-        }
-        //------
-
-        GUI.Label (new Rect (10, 190, 200, 20), "Start radius:"+(Mathf.Round(initial_radius*100)/100));
-
-        if (GUI.Button(new Rect(10,210,50,20), "-")) {
-            initial_radius*=0.9f;
-            rootNode.reset(initial_length,initial_radius);
-        }
-        if (GUI.Button(new Rect(60,210,50,20), "+")) {
-            initial_radius/=0.9f;
-            rootNode.reset(initial_length,initial_radius);
-        }
-    }
-    */
 
     // Update is called once per frame
     void Update()
     {
+		
         t++;
         rootNode.do_rotate(0.1f * Mathf.Cos(0.03f * t));
-        rootNode.pivot();
+        
+        //rootNode.pivot();
     }
 }
 
