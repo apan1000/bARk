@@ -21,7 +21,7 @@ public class LTree
 	{
 		float new_radius = appearance.transform.localScale.x*radius_decay;
 		float new_length = appearance.transform.localScale.y*length_decay;
-		if(new_radius<minimum_radius) return;
+		if(new_radius < minimum_radius) return;
 		branches = new List<LTree>();
 
 		GameObject progenitor = new GameObject();
@@ -32,7 +32,7 @@ public class LTree
 		Debug.Log("the offset is "+appearance.transform.localPosition.y);
 		progenitor.transform.Translate(0,2*appearance.transform.localPosition.y,0);
 		int num_children= (int)(Random.value*(maximum_branches-minimum_branches)+minimum_branches);
-		for(int i =0;i<num_children;i++)
+		for(int i = 0; i < num_children; i++)
 		{
 			LTree child = new LTree();
 			branches.Add(child);
@@ -50,8 +50,8 @@ public class LTree
 	public void do_rotate(float amt)
 	{
 		contents.transform.Rotate(0,0,amt);
-		if(branches==null) return;
-		for(int i=0;i<branches.Count;i++)
+		if(branches == null) return;
+		for(int i = 0; i < branches.Count; i++)
 		{
 			branches[i].do_rotate(amt);
 		}
@@ -71,26 +71,28 @@ public class LTree
 
 		if (parentTree != null) {
 			contents.transform.parent = parentTree.transform;
+			contents.transform.localEulerAngles= new Vector3(0,0,0);
+			contents.transform.Rotate(Random.value*100-50,0,Random.value*100-50);
 		} else {
 			if (main != null) {
 				contents.transform.parent = main;
+				contents.transform.localEulerAngles= new Vector3(0,0,0);
 			}
 		}
+
 		contents.transform.localPosition = new Vector3 (0, 0, 0);
-		contents.transform.localEulerAngles= new Vector3(0,0,0);
+		contents.name = "Contents";
+
 		appearance.transform.parent = contents.transform;
 		appearance.transform.localPosition = new Vector3(0,0,0);
 		appearance.transform.localEulerAngles= new Vector3(0,0,0);
-		contents.name = "Contents";
-		contents.transform.Rotate(Random.value*100-50,0,Random.value*100-50);
 		appearance.name = "Appearance";
-		Vector3 scaleVector = new Vector3(radius,length, radius);
+
+		Vector3 scaleVector = new Vector3(radius, length, radius);
 		appearance.transform.localScale = scaleVector;
 		appearance.transform.Translate(0,0.5f*LTreeController.yScale*length,0);
 		createChildren();
 	}
-
-
 }
 
 
@@ -166,7 +168,7 @@ public class LTreeController : MonoBehaviour {
 	void Update () {
 		t++;
 		rootNode.do_rotate(0.1f*Mathf.Cos(0.03f*t));
-		rootNode.pivot();
+		//rootNode.pivot();
 	}
 
 
