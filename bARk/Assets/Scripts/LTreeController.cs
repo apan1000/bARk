@@ -94,7 +94,7 @@ public class LTree
 
 		Vector3 scaleVector = new Vector3(radius, length, radius);
 		appearance.transform.localScale = scaleVector;
-		appearance.transform.Translate(0,0.5f*LTreeController.yScale*length,0);
+		appearance.transform.Translate(0,0.95f*LTreeController.yScale*length,0);
         
         createChildren();
 	}
@@ -131,7 +131,7 @@ public class LTreeController : MonoBehaviour, ITrackableEventHandler
     the LTree is an L-System-based tree object that creates a tree structure from simple rules.
     */
     public float initial_length = 1;
-    public static PrimitiveType limbType = PrimitiveType.Cube;
+	public static PrimitiveType limbType = PrimitiveType.Cylinder;
     public static float yScale = 1f;
     public float initial_radius = 0.1f;
     public bool isTracking;
