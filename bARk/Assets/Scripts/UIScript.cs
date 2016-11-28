@@ -17,6 +17,11 @@ public class UIScript : MonoBehaviour {
     Slider colorslide;
     GameObject colorslideObject;
 
+    [Header("Leaf Settings")]
+    public Vector3 leafFinalPos;
+    public float leafScale = 0.2f;
+    public GameObject leafDrawerPrefab;
+
 
     // Use this for initialization
     void Start () {
@@ -60,10 +65,12 @@ public class UIScript : MonoBehaviour {
         {
             SetColor.GetComponent<Button>().gameObject.SetActive(false);
             Main.GetComponentInChildren<Text>().text = "Preview tree! --->";
+            startLeafShaping();
             currentMenu++;
         } 
         else if (currentMenu == 2) //go from shaping leaves to previewing tree
         {
+            endLeafShaping();
             Main.GetComponentInChildren<Text>().text = "Plant your tree! --->";
             currentMenu++;
         }
@@ -103,4 +110,21 @@ public class UIScript : MonoBehaviour {
             //code for planting tree (animation?)
         }
 	}
+
+    private void startLeafShaping() {
+        Instantiate(leafDrawerPrefab);
+        Vector3 camPos = Camera.main.transform.position;
+        camPos.z -= 20;
+        Camera.main.transform.position = camPos;
+    }
+
+    private void endLeafShaping() {
+        Vector3 camPos = Camera.main.transform.position;
+        camPos.z += 20;
+        Camera.main.transform.position = camPos;
+        GameObject leaf = GameObject.Find("Leaf(Clone)");
+        leaf.transform.position = leafFinalPos;
+        leaf.transform.localScale = new Vector3(leafScale, leafScale, 0.01f);
+    }
+
 }
