@@ -8,6 +8,7 @@ public class UIScript : MonoBehaviour {
     public Button SetColor;
 
     public Material colorTest;
+    public TreeSettings tS;
 
     private Color color;
     private float r = 0.8f , g = 0.1f, b = 0.1f;
@@ -38,6 +39,7 @@ public class UIScript : MonoBehaviour {
         // g = (Mathf.Sin(frequence * test + 2) * 127 + 128)/255;
         // b = (Mathf.Sin(frequence * test + 4) * 127 + 128)/255;
         colorTest.color = Color.HSVToRGB(test*0.01f, .7f, .7f);//new Color(r, g, b, 1.0f);
+        color = colorTest.color;
     }
 
     public void changeColor() //show/hide slider
@@ -76,6 +78,7 @@ public class UIScript : MonoBehaviour {
         }
         else if (currentMenu == 3) //go from previewing tree to planting tree
         {
+            tS.col = color;
             Application.LoadLevel("ARCamera"); // TODO: do other cool stuff, not just change scene
             Main.GetComponentInChildren<Text>().text = "View your tree! --->";
             currentMenu++;
