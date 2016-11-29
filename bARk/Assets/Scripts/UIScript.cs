@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class UIScript : MonoBehaviour {
 
@@ -9,8 +8,6 @@ public class UIScript : MonoBehaviour {
     public Button SetColor;
 
     public Material colorTest;
-    public TreeSettings tS;
-
 
     private Color color;
     private float r = 0.8f , g = 0.1f, b = 0.1f;
@@ -36,12 +33,11 @@ public class UIScript : MonoBehaviour {
 
     public void changeColorSlider(float test)
     {
-        float frequence = 0.3f;
-        r = (Mathf.Sin(frequence * test + 0)* 127 + 128)/255;
-        g = (Mathf.Sin(frequence * test + 2) * 127 + 128)/255;
-        b = (Mathf.Sin(frequence * test + 4) * 127 + 128)/255;
-        colorTest.color = new Color(r, g, b, 1.0f);
-        color = colorTest.color;
+        // float frequence = 0.3f;
+        // r = (Mathf.Sin(frequence * test + 0)* 127 + 128)/255;
+        // g = (Mathf.Sin(frequence * test + 2) * 127 + 128)/255;
+        // b = (Mathf.Sin(frequence * test + 4) * 127 + 128)/255;
+        colorTest.color = Color.HSVToRGB(test*0.01f, .7f, .7f);//new Color(r, g, b, 1.0f);
     }
 
     public void changeColor() //show/hide slider
@@ -80,11 +76,8 @@ public class UIScript : MonoBehaviour {
         }
         else if (currentMenu == 3) //go from previewing tree to planting tree
         {
-            // Save tree settings in scriptable object
-            tS.col = color;
-
+            Application.LoadLevel("ARCamera"); // TODO: do other cool stuff, not just change scene
             Main.GetComponentInChildren<Text>().text = "View your tree! --->";
-            SceneManager.LoadScene("ARCamera"); // TODO: do other cool stuff, not just change scene
             currentMenu++;
         }
         else if (currentMenu == 4) //go from planting tree back to viewing world
@@ -96,6 +89,7 @@ public class UIScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        RenderSettings.skybox.SetFloat("_Rotation", Time.time); // Rotate skybox :)
 
         if (currentMenu == 0) //use camera to show trees
         {
