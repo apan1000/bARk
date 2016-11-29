@@ -21,6 +21,8 @@ public class LTree
     public float minimum_branches = 1;
     public float maximum_branches = 3;
     public float minimum_radius = 0.1f;
+    public static Color mCol;
+    public Material mMaterial;
     #endregion
 
     void createChildren()
@@ -91,11 +93,12 @@ public class LTree
 		appearance.transform.localPosition = new Vector3(0,0,0);
 		appearance.transform.localEulerAngles= new Vector3(0,0,0);
 		appearance.name = "Appearance";
+        appearance.GetComponent<Renderer>().material.color = mCol;
 
-		Vector3 scaleVector = new Vector3(radius, length, radius);
+        Vector3 scaleVector = new Vector3(radius, length, radius);
 		appearance.transform.localScale = scaleVector;
 		appearance.transform.Translate(0,0.95f*LTreeController.yScale*length,0);
-        
+
         createChildren();
 	}
 
@@ -134,7 +137,9 @@ public class LTreeController : MonoBehaviour, ITrackableEventHandler
 	public static PrimitiveType limbType = PrimitiveType.Cylinder;
     public static float yScale = 1f;
     public float initial_radius = 0.1f;
+    public TreeSettings treeCol;
     public bool isTracking;
+    public bool dontUseTracking;
 
     private int t = 0;
     private LTree rootNode;
@@ -144,13 +149,18 @@ public class LTreeController : MonoBehaviour, ITrackableEventHandler
     void Start()
     {
         rootNode = new LTree();
-		rootNode.construct(transform, null, initial_length, initial_radius);
-		//StartCoroutine (rootNode.grow ());
+        LTree.mCol = treeCol.col;
+        rootNode.mMaterial = treeCol.mat;
 
-        mTrackableBehaviour = transform.parent.GetComponent<TrackableBehaviour>();
-        if (mTrackableBehaviour)
+		rootNode.construct(transform, null, initial_length, initial_radius);
+        //StartCoroutine (rootNode.grow ());
+        if (!dontUseTracking)
         {
-            mTrackableBehaviour.RegisterTrackableEventHandler(this);
+            mTrackableBehaviour = transform.parent.GetComponent<TrackableBehaviour>();
+            if (mTrackableBehaviour)
+            {
+                mTrackableBehaviour.RegisterTrackableEventHandler(this);
+            }
         }
     }
 
