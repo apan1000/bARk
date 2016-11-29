@@ -76,6 +76,7 @@ public class UIScript : MonoBehaviour {
         }
         else if (currentMenu == 3) //go from previewing tree to planting tree
         {
+            Application.LoadLevel("ARCamera"); // TODO: do other cool stuff, not just change scene
             Main.GetComponentInChildren<Text>().text = "View your tree! --->";
             currentMenu++;
         }
