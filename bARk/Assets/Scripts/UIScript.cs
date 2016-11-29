@@ -33,11 +33,11 @@ public class UIScript : MonoBehaviour {
 
     public void changeColorSlider(float test)
     {
-        float frequence = 0.3f;
-        r = (Mathf.Sin(frequence * test + 0)* 127 + 128)/255;
-        g = (Mathf.Sin(frequence * test + 2) * 127 + 128)/255;
-        b = (Mathf.Sin(frequence * test + 4) * 127 + 128)/255;
-        colorTest.color = new Color(r, g, b, 1.0f);
+        // float frequence = 0.3f;
+        // r = (Mathf.Sin(frequence * test + 0)* 127 + 128)/255;
+        // g = (Mathf.Sin(frequence * test + 2) * 127 + 128)/255;
+        // b = (Mathf.Sin(frequence * test + 4) * 127 + 128)/255;
+        colorTest.color = Color.HSVToRGB(test*0.01f, .7f, .7f);//new Color(r, g, b, 1.0f);
     }
 
     public void changeColor() //show/hide slider
