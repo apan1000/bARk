@@ -89,6 +89,7 @@ public class UIScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        RenderSettings.skybox.SetFloat("_Rotation", Time.time); // Rotate skybox :)
 
         if (currentMenu == 0) //use camera to show trees
         {
