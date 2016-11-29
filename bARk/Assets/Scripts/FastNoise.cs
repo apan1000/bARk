@@ -274,19 +274,19 @@ public class FastNoise
 	private const MethodImplOptions methodImplOption = MethodImplOptions.AggressiveInlining;
 #endif
 
-	[MethodImpl(methodImplOption)]
+	// [MethodImpl(methodImplOption)]
 	private static int FastFloor(float f) { return (f >= 0.0f ? (int)f : (int)f - 1); }
 
-	[MethodImpl(methodImplOption)]
+	// [MethodImpl(methodImplOption)]
 	private static int FastRound(float f) { return (f >= 0.0f) ? (int)(f + 0.5f) : (int)(f - 0.5f); }
 
-	[MethodImpl(methodImplOption)]
+	// [MethodImpl(methodImplOption)]
 	private static float Lerp(float a, float b, float t) { return a + t * (b - a); }
 
-	[MethodImpl(methodImplOption)]
+	// [MethodImpl(methodImplOption)]
 	private static float InterpHermiteFunc(float t) { return t * t * (3 - 2 * t); }
 
-	[MethodImpl(methodImplOption)]
+	// [MethodImpl(methodImplOption)]
 	private static float InterpQuinticFunc(float t) { return t * t * t * (t * (t * 6 - 15) + 10); }
 
 	private void CalculateFractalBounding()
@@ -321,19 +321,19 @@ public class FastNoise
 		}
 	}
 
-	[MethodImpl(methodImplOption)]
+	// [MethodImpl(methodImplOption)]
 	private byte Index2D_256(byte offset, int x, int y)
 	{
 		return m_perm[(x & 0xff) + m_perm[(y & 0xff) + offset]];
 	}
 
-	[MethodImpl(methodImplOption)]
+	// [MethodImpl(methodImplOption)]
 	private byte Index3D_256(byte offset, int x, int y, int z)
 	{
 		return m_perm[(x & 0xff) + m_perm[(y & 0xff) + m_perm[(z & 0xff) + offset]]];
 	}
 
-	[MethodImpl(methodImplOption)]
+	// [MethodImpl(methodImplOption)]
 	private byte Index4D_256(byte offset, int x, int y, int z, int w)
 	{
 		return m_perm[(x & 0xff) + m_perm[(y & 0xff) + m_perm[(z & 0xff) + m_perm[(w & 0xff) + offset]]]];
@@ -345,7 +345,7 @@ public class FastNoise
 	private const int Z_PRIME = 6971;
 	private const int W_PRIME = 1013;
 
-	[MethodImpl(methodImplOption)]
+	// [MethodImpl(methodImplOption)]
 	static float ValCoord2D(int seed, int x, int y)
 	{
 		int n = X_PRIME * x;
@@ -356,7 +356,7 @@ public class FastNoise
 		return 9.311924889611565e-10f * (((n * (n * n * 60493 + 19990303) + 1376312589) & 0x7fffffff) - 1073891824);
 	}
 
-	[MethodImpl(methodImplOption)]
+	// [MethodImpl(methodImplOption)]
 	static float ValCoord3D(int seed, int x, int y, int z)
 	{
 		int n = X_PRIME * x;
@@ -368,8 +368,8 @@ public class FastNoise
 		return 9.311924889611565e-10f * (((n * (n * n * 60493 + 19990303) + 1376312589) & 0x7fffffff) - 1073891824);
 	}
 
-	[MethodImpl(methodImplOption)]
-	static float ValCoord4D(int seed, int x, int y, int z, int w)
+    // [MethodImpl(methodImplOption)]
+    static float ValCoord4D(int seed, int x, int y, int z, int w)
 	{
 		int n = X_PRIME * x;
 		n += Y_PRIME * y;
@@ -381,19 +381,19 @@ public class FastNoise
 		return 9.311924889611565e-10f * (((n * (n * n * 60493 + 19990303) + 1376312589) & 0x7fffffff) - 1073891824);
 	}
 
-	[MethodImpl(methodImplOption)]
+	// [MethodImpl(methodImplOption)]
 	private float ValCoord2DFast(byte offset, int x, int y)
 	{
 		return VAL_LUT[Index2D_256(offset, x, y)];
 	}
 
-	[MethodImpl(methodImplOption)]
+	// [MethodImpl(methodImplOption)]
 	private float ValCoord3DFast(byte offset, int x, int y, int z)
 	{
 		return VAL_LUT[Index3D_256(offset, x, y, z)];
 	}
 
-	[MethodImpl(methodImplOption)]
+	// [MethodImpl(methodImplOption)]
 	private float GradCoord2D(byte offset, int x, int y, float xd, float yd)
 	{
 		byte lutPos = m_perm12[(x & 0xff) + m_perm[(y & 0xff) + offset]];
@@ -401,7 +401,7 @@ public class FastNoise
 		return xd * GRAD_X[lutPos] + yd * GRAD_Y[lutPos];
 	}
 
-	[MethodImpl(methodImplOption)]
+	// [MethodImpl(methodImplOption)]
 	private float GradCoord3D(byte offset, int x, int y, int z, float xd, float yd, float zd)
 	{
 		byte lutPos = m_perm12[(x & 0xff) + m_perm[(y & 0xff) + m_perm[(z & 0xff) + offset]]];
@@ -409,7 +409,7 @@ public class FastNoise
 		return xd * GRAD_X[lutPos] + yd * GRAD_Y[lutPos] + zd * GRAD_Z[lutPos];
 	}
 
-	[MethodImpl(methodImplOption)]
+	// [MethodImpl(methodImplOption)]
 	private float GradCoord4D(byte offset, int x, int y, int z, int w, float xd, float yd, float zd, float wd)
 	{
 		byte lutPos = (byte)(m_perm[(x & 0xff) + m_perm[(y & 0xff) + m_perm[(z & 0xff) + m_perm[(w & 0xff) + offset]]]] & 31);

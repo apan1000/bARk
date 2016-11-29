@@ -21,7 +21,36 @@ public class DatabaseHandler : MonoBehaviour
     private string email = "staffan.sandberg94@gmail.com";
     private string password = "abccbe123321";
 
+    Firebase.DependencyStatus dependencyStatus = Firebase.DependencyStatus.UnavailableOther;
+
     void Start()
+    {
+        // Extra safety stuff
+        dependencyStatus = Firebase.FirebaseApp.CheckDependencies();
+        if (dependencyStatus != Firebase.DependencyStatus.Available)
+        {
+            Firebase.FirebaseApp.FixDependenciesAsync().ContinueWith(task => {
+                dependencyStatus = Firebase.FirebaseApp.CheckDependencies();
+                if (dependencyStatus == Firebase.DependencyStatus.Available)
+                {
+                    InitFirebase();
+                }
+                else
+                {
+                    // This should never happen if we're only using Firebase Analytics.
+                    // It does not rely on any external dependencies.
+                    Debug.LogError(
+                        "Could not resolve all Firebase dependencies: " + dependencyStatus);
+                }
+            });
+        }
+        else
+        {
+            InitFirebase();
+        }
+    }
+
+    void InitFirebase()
     {
         // Get root reference location of database
         databaseRef = FirebaseDatabase.DefaultInstance.RootReference;
@@ -33,6 +62,7 @@ public class DatabaseHandler : MonoBehaviour
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://bark-11fd5.firebaseio.com/");
         info.text = "Startup completed";
 
+        // Should listen for changes in the tree branch
         var reference = FirebaseDatabase.DefaultInstance.GetReference("trees");
         reference.ChildAdded += (object sender, ChildChangedEventArgs args) =>
         {
@@ -48,17 +78,17 @@ public class DatabaseHandler : MonoBehaviour
 
     public void writeData()
     {
-        writeNewUser(user.UserId, "Staffan", email);
-        addNewTree(user.UserId, "björk", "dots", "12/19/2940", "poster1");
-        addNewTree(user.UserId, "tall", "groovy", "13/19/2940", "poster2");
-        addNewTree(user.UserId, "ek", "funkey", "14/19/2940", "poster3");
+        info.text = "Writing data";
+        addNewTree(auth.CurrentUser.UserId, "björk", "dots", "12/19/2940", "poster1");
+        addNewTree(auth.CurrentUser.UserId, "tall", "groovy", "13/19/2940", "poster2");
+        addNewTree(auth.CurrentUser.UserId, "ek", "funkey", "14/19/2940", "poster3");
         info.text = "Data written";
     }
 
     private void addNewTree(string userID, string name, string barkType, string plantDate, string trackingImage)
     {
         string key = databaseRef.Child("trees").Push().Key;
-        ARTree tree = new ARTree(user.UserId, name, barkType, plantDate, trackingImage);
+        ARTree tree = new ARTree(userID, name, barkType, plantDate, trackingImage);
         Dictionary<string, object> entryVal = tree.ToDictionary();
 
         Dictionary<string, object> childUpdates = new Dictionary<string, object>();
@@ -67,25 +97,18 @@ public class DatabaseHandler : MonoBehaviour
         databaseRef.UpdateChildrenAsync(childUpdates);
     }
 
-    private void writeNewUser(string userID, string name, string email)
-    {
-        User user = new User(name, email);
-        string json = JsonUtility.ToJson(user);
-
-        // Save new user under users and userID
-        databaseRef.Child("users").Child(userID).SetRawJsonValueAsync(json);
-    }
-
-    // Log in with email and password
-    public void LoginUserWithEmail()
+    // Log in anon
+    public void LoginAnon()
     {
         DisableUI();
         info.text = "LOGIN START";
-        auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(SignInHandler);
+        auth.SignInAnonymouslyAsync().ContinueWith(SignInHandler);
     }
 
     void SignInHandler(Task<Firebase.Auth.FirebaseUser> authTask)
     {
+        
+        info.text = "Sign in handler.";
         if (authTask.IsCanceled)
             info.text = "Task was canceled.";
         else if (authTask.IsFaulted)
@@ -93,33 +116,13 @@ public class DatabaseHandler : MonoBehaviour
         else if (authTask.IsCompleted)
         {
             info.text = "Sign in completed.";
-            if(auth.CurrentUser != null)
-            {
-                info.text = "Current user:\n" + auth.CurrentUser.Email;
-            }
-        }
-        EnableUI();
+        }EnableUI();
     }
 
-    public void CreateUserWithEmail()
+    void OnDestroy()
     {
-        auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(
-            task => {
-                if (!task.IsCanceled && !task.IsFaulted)
-                {
-                    // User created
-                    info.text = "User created";
-                }
-                else
-                {
-                    // User creation failed
-                    info.text = "User creation failed";
-                }
-                if (task.IsCanceled) { info.text = "Task canceled!!"; }
-                if (task.IsFaulted) { info.text = "Task faulted!!"; }
-            });
+        auth = null;
     }
-
 
     void DisableUI()
     {
@@ -133,6 +136,8 @@ public class DatabaseHandler : MonoBehaviour
     }
 }
 
+
+// Other classes
 public class User
 {
     public string username;
