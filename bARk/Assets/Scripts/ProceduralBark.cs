@@ -32,11 +32,11 @@ public class ProceduralBark : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		GenerateTexture();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		// GenerateTexture();
 	}
 }
