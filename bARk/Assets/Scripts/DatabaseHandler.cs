@@ -17,10 +17,6 @@ public class DatabaseHandler : MonoBehaviour
 
     private List<ARTree> m_theTrees;
     private DatabaseReference m_databaseRef;
-    string m_name;
-    string m_barkType;
-    string m_plantDate;
-    string m_trackingImage;
 
     Firebase.DependencyStatus dependencyStatus = Firebase.DependencyStatus.UnavailableOther;
 
@@ -57,48 +53,32 @@ public class DatabaseHandler : MonoBehaviour
 
 
        /// Listen for new trees that are added
-       /// Finds all current trees when app is started??
+       /// Finds all current trees when app is started?? It only finds the first tree!?!?!?
         FirebaseDatabase.DefaultInstance.GetReference("Trees").ChildAdded += (object sender, ChildChangedEventArgs args) =>
         {
+            Debug.Log(args.Snapshot.Child("name").Value.ToString());
             if (args.DatabaseError != null) {
                 Debug.LogError(args.DatabaseError.Message);
             }
             if(args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
             {
                 Debug.Log("Antal Childs: "+ args.Snapshot.ChildrenCount);
-                foreach(var childSnapshot in args.Snapshot.Children)
+
+                foreach (var childSnapshot in args.Snapshot.Children)
                 {
-                    Debug.Log("Alla childs");
-                    Debug.Log(childSnapshot.Child("name").Value.ToString());
                     string name = childSnapshot.Child("name").Value.ToString();
                     string barkType = childSnapshot.Child("barkType").Value.ToString();
                     string plantDate = childSnapshot.Child("plantDate").Value.ToString();
                     string trackingImage = childSnapshot.Child("trackingImage").Value.ToString();
                     ARTree tree = new ARTree(name, barkType, plantDate, trackingImage);
                     m_theTrees.Add(tree);
-                    UpdateText();
                 }
             }
         };
         info.text = "Startup completed";
     }
 
-    private void UpdateText()
-    {
-        Debug.Log(m_theTrees.Count.ToString());
-    }
-
-    private void TreeAdded(object sender, ChildChangedEventArgs args)
-    {
-        if (args.DatabaseError != null)
-        {
-            info.text = args.DatabaseError.Message;
-            return;
-        }
-        info.text = "new Tree added!";
-        args.Snapshot.Child("trees");
-    }
-
+    // Saves trees to Firebase
     public void writeData()
     {
         info.text = "Writing data";
@@ -108,62 +88,25 @@ public class DatabaseHandler : MonoBehaviour
         info.text = "Data written";
     }
 
-    // Add trees to Firebase Via transactions
+    // Add tree to database
     private void addNewTree(string name, string barkType, string plantDate, string trackingImage)
     {
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.GetReference("Trees");
 
-        m_name = name;
-        m_barkType = barkType;
-        m_plantDate = plantDate;
-        m_trackingImage = trackingImage;
+        // Add trees via transaction
+        reference.RunTransaction(mutableData =>
+        {
+            List<object> treeList = mutableData.Value as List<object>;
 
-        reference.RunTransaction(AddScoreTransaction).ContinueWith(task => {
-            if (task.Exception != null)
-            {
-                Debug.Log(task.Exception.ToString());
-            }
-            else if (task.IsCompleted)
-            {
-                Debug.Log("Transaction complete.");
-            }
+            if (treeList == null)
+                treeList = new List<object>();
+
+            ARTree tree = new ARTree(name, barkType, plantDate, trackingImage);
+            treeList.Add(tree.ToDictionary());
+            mutableData.Value = treeList;
+            return TransactionResult.Success(mutableData);
         });
     }
-    public TransactionResult AddScoreTransaction(MutableData mutableData)
-    {
-        List<object> treeList = mutableData.Value as List<object>;
-
-        if(treeList == null) {
-            treeList = new List<object>();
-        }
-        ARTree tree = new ARTree(m_name, m_barkType, m_plantDate, m_trackingImage);
-        treeList.Add(tree.ToDictionary());
-        mutableData.Value = treeList;
-        return TransactionResult.Success(mutableData);
-    }
-
-    // This only runs when the tree node is empty on Firebase
-    //private void SyncCurrentTrees(Task<DataSnapshot> task)
-    //{
-    //    Debug.Log("Hallåpp!!");
-    //    if (task.IsFaulted) {
-    //        Debug.Log("FAILED TO SYNC");
-    //    }
-    //    else if (task.IsCompleted){
-    //        DataSnapshot snapshot = task.Result;
-    //        foreach (var childSnapshot in snapshot.Children)
-    //        {
-    //            Debug.Log("Sync on Startup!");
-    //            string name = childSnapshot.Child("name").Value.ToString();
-    //            string barkType = childSnapshot.Child("barkType").Value.ToString();
-    //            string plantDate = childSnapshot.Child("plantDate").Value.ToString();
-    //            string trackingImage = childSnapshot.Child("trackingImage").Value.ToString();
-    //            ARTree tree = new ARTree(name, barkType, plantDate, trackingImage);
-    //            m_theTrees.Add(tree);
-    //            UpdateText();
-    //        }
-    //    }
-    //}
 }
 
 // Other classes
