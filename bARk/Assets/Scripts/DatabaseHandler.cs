@@ -22,7 +22,7 @@ public class DatabaseHandler : MonoBehaviour
 
     void Start()
     {
-        // Extra safety stuff
+        // Check if depen
         dependencyStatus = Firebase.FirebaseApp.CheckDependencies();
         if (dependencyStatus != Firebase.DependencyStatus.Available) {
             Firebase.FirebaseApp.FixDependenciesAsync().ContinueWith(task => {
@@ -48,22 +48,20 @@ public class DatabaseHandler : MonoBehaviour
 
         m_theTrees = new List<ARTree>();
 
-        // Get all current trees
-        // FirebaseDatabase.DefaultInstance.GetReference("Trees").GetValueAsync().ContinueWith(SyncCurrentTrees);
+        // Get all current trees on startup
+        FirebaseDatabase.DefaultInstance.GetReference("Trees").GetValueAsync().ContinueWith(SyncCurrentTrees);
 
-
-       /// Listen for new trees that are added
-       /// Finds all current trees when app is started?? It only finds the first tree!?!?!?
+        /// Listen for new trees that are added
+        /// Is triggered on first child under Trees when app starts?!?!?!?!? Сука Блять
         FirebaseDatabase.DefaultInstance.GetReference("Trees").ChildAdded += (object sender, ChildChangedEventArgs args) =>
         {
-            Debug.Log(args.Snapshot.Child("name").Value.ToString());
+            Debug.Log("--ChildAdded-- "+ args.Snapshot.Child("name").Value.ToString());
             if (args.DatabaseError != null) {
                 Debug.LogError(args.DatabaseError.Message);
             }
             if(args.Snapshot != null && args.Snapshot.ChildrenCount > 0)
             {
-                Debug.Log("Antal Childs: "+ args.Snapshot.ChildrenCount);
-
+                Debug.Log("--ChildAdded-- Antal Childs: "+ args.Snapshot.ChildrenCount);
                 foreach (var childSnapshot in args.Snapshot.Children)
                 {
                     string name = childSnapshot.Child("name").Value.ToString();
@@ -106,6 +104,18 @@ public class DatabaseHandler : MonoBehaviour
             mutableData.Value = treeList;
             return TransactionResult.Success(mutableData);
         });
+    }
+
+    private void SyncCurrentTrees(Task<DataSnapshot> task)
+    {
+        Debug.Log("Find all trees");
+        DataSnapshot trees = task.Result;
+        Debug.Log("Trees found: " + trees.ChildrenCount);
+
+        foreach(var snapshot in trees.Children)
+        {
+            Debug.Log(snapshot.Child("name").Value.ToString());
+        }
     }
 }
 
