@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 public class LeafDrawer : MonoBehaviour {
 
@@ -37,9 +38,8 @@ public class LeafDrawer : MonoBehaviour {
         if (Input.GetMouseButton(0) && !leafCreated) { 
             Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, zDist);
             Vector3 drawPos = Camera.main.ScreenToWorldPoint(mousePos);
-            print(isOverlapping(drawPos));
             if ((drawPos-endPoint).magnitude <= endSnapDistance && points.Count > 5) {
-                points.Add(new Vector3(endPoint.x, endPoint.y, endPoint.z));
+         //       points.Add(new Vector3(endPoint.x, endPoint.y, endPoint.z));
                 finalizeLeaf();
             }   else if (!pointToClose(drawPos) && !isOverlapping(drawPos)) {
                 points.Add(drawPos);
@@ -52,16 +52,49 @@ public class LeafDrawer : MonoBehaviour {
 
     private void finalizeLeaf() {
         LeafGenerator lg = new LeafGenerator();
-        Vector3[] reversedPoints = new Vector3[points.Count];
+       // Vector3[] reversedPoints = new Vector3[points.Count];
         Mesh leaf = lg.generateLeafMesh(points.ToArray());
         GameObject newLeaf = Instantiate(meshObject);
-        Mesh invertedLeaf = reverseNormals(leaf);
+     //   Mesh invertedLeaf = reverseNormals(leaf);
         newLeaf.GetComponent<MeshFilter>().mesh = leaf;
         newLeaf.GetComponent<MeshCollider>().sharedMesh = leaf;
         leafCreated = true;
         newLeaf.transform.position = Vector3.zero;
-        Destroy(gameObject);
+        createLeafImage(200, 200);
+    //    Destroy(gameObject);
        // newLeaf.transform.localScale = new Vector3(-1, 1, 1);
+    }
+
+    public void createLeafImage(int height, int width) {
+        float xStep = Screen.width / (float)(width);
+        float yStep = Screen.height / (float)(height);
+
+        Texture2D texture = new Texture2D(width, height);
+
+        for (int y = 0; y <= height; y++) {
+            for (int x = 0; x <= width; x++) {
+                RaycastHit hit;
+                Vector3 from = Camera.main.ScreenToWorldPoint(new Vector3(xStep * x, yStep * y, zDist));
+                from.z -= zDist;
+                Vector3 to = from;
+                to.z = 0;
+                //       Debug.Log("From: " + from + " To: " + to);
+                if (Physics.Raycast(from, to - from, out hit)) {
+                    if (hit.transform.name == "Leaf(Clone)") {
+                        texture.SetPixel(x, y, Color.green);
+                        Debug.DrawLine(from, to, Color.green, 40.0f);
+                    }
+                } else {
+                    Debug.DrawLine(from, to, Color.red, 40.0f);
+                    texture.SetPixel(x, y, new Color(0, 0, 0, 0));
+                }
+            }
+        }
+
+        texture.Apply();
+        byte[] bytes = texture.EncodeToPNG();
+        File.WriteAllBytes(Application.dataPath + "/Leaf.png", bytes);
+
     }
 
     private bool isOverlapping(Vector3 pos) {
