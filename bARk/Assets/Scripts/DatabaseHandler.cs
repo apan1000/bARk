@@ -18,6 +18,7 @@ public class DatabaseHandler : MonoBehaviour
     private List<ARTree> m_theTrees;
     private DatabaseReference m_databaseRef;
 
+
     Firebase.DependencyStatus dependencyStatus = Firebase.DependencyStatus.UnavailableOther;
 
     void Start()
@@ -53,8 +54,10 @@ public class DatabaseHandler : MonoBehaviour
 
         /// Listen for new trees that are added
         /// Is triggered on first child under Trees when app starts?!?!?!?!? Сука Блять
-        FirebaseDatabase.DefaultInstance.GetReference("Trees").ChildAdded += (object sender, ChildChangedEventArgs args) =>
+        FirebaseDatabase.DefaultInstance.GetReference("Trees").LimitToLast(1).ChildAdded += (object sender, ChildChangedEventArgs args) =>
         {
+            //TODO: use timestamp to prevent first to be added
+            Debug.Log("--ChildAdded-- Time: " + args.Snapshot.Child("plantDate").Value.ToString());  
             Debug.Log("--ChildAdded-- "+ args.Snapshot.Child("name").Value.ToString());
             if (args.DatabaseError != null) {
                 Debug.LogError(args.DatabaseError.Message);
@@ -80,8 +83,10 @@ public class DatabaseHandler : MonoBehaviour
     public void writeData()
     {
         info.text = "Writing data";
+
+
         addNewTree("björk", "dots", "12/19/2940", "poster1");
-        addNewTree("tall", "groovy", "13/19/2940", "poster2");
+        addNewTree("tall", "groovy", "13/19/2940", "poster2"); 
         addNewTree("ek", "funkey", "14/19/2940", "poster3");
         info.text = "Data written";
     }
