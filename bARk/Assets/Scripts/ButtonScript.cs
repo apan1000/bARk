@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ButtonScript : MonoBehaviour {
-
-	public Material TreeMaterial;
+	
+	private Material treeMaterial;
 
 	// Use this for initialization
 	void Start () {
-		
+		treeMaterial = GameObject.FindGameObjectWithTag("Tree").GetComponent<Renderer>().sharedMaterial;
 	}
 	
 	// Update is called once per frame
@@ -17,6 +17,6 @@ public class ButtonScript : MonoBehaviour {
 	}
 	
 	public void SetTreeTexture() {
-		TreeMaterial.mainTexture = GetComponent<Renderer>().sharedMaterial.mainTexture;
+		treeMaterial.mainTexture = GetComponent<Renderer>().sharedMaterial.mainTexture;
 	}
 }
