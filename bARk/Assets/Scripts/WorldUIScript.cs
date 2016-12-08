@@ -24,29 +24,30 @@ public class WorldUIScript : MonoBehaviour {
 	private void CheckTouch() {
 		#if UNITY_ANDROID
 		// for (int i = 0; i < Input.touchCount; ++i) {
-		if (Input.GetTouch(0).phase == TouchPhase.Began) {
-			
-			// Construct a ray from the current touch coordinates
-			Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-			RaycastHit hit;
-			if (Physics.Raycast(ray, out hit)) {
-				if(hit.transform.gameObject.tag == "Button") {
-					if(currentMenu == 1) //shaping tree
-					{
-						hit.transform.GetComponent<ButtonScript>().SetTreeTexture();
-						// ButtonScript bs = (ButtonScript) hit.transform.gameObject.GetComponent(typeof(ButtonScript));
-						// bs.setTreeTexture();
-						GoNext();
-					}
-					else if(true) //Choosing bark
-					{
+		if(Input.touchCount > 0) {
+			if (Input.GetTouch(0).phase == TouchPhase.Began) {
+				
+				// Construct a ray from the current touch coordinates
+				Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+				RaycastHit hit;
+				if (Physics.Raycast(ray, out hit)) {
+					if(hit.transform.gameObject.tag == "Button") {
+						if(currentMenu == 1) //shaping tree
+						{
+							hit.transform.GetComponent<ButtonScript>().SetTreeTexture();
+							// ButtonScript bs = (ButtonScript) hit.transform.gameObject.GetComponent(typeof(ButtonScript));
+							// bs.setTreeTexture();
+							GoNext();
+						}
+						else if(true) //Choosing bark
+						{
 
+						}
+						
 					}
-					
 				}
-			}              
+			}
 		}
-		// }
 		#endif
 
 		#if UNITY_EDITOR
