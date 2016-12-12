@@ -12,14 +12,20 @@ public class BoidManager : MonoBehaviour {
     public float minSpeed = 1.0f;
     public float maxSpeed = 5.0f;
     public float minNeighbourDistance = 0.2f;
+    public float avoidanceDistance = 2.0f;
     public float randomness = 1.0f;
+    public float patrolDistance = 20.0f;
 
     private float lastTime = 0;
     private int lastNeighbourUpdate = 0;
     public float neighbourUpdateTime = 2.0f;
 
     public Vector3 tendingPlace;
+    public float seekPointChangeInterval = 5.0f;
+    private float seekCounter;
+    public Vector3 avoidancePoint;
 
+    public Transform avoidanceObject;
 
     public GameObject[] boids;
 
@@ -31,6 +37,7 @@ public class BoidManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        seekCounter = seekPointChangeInterval;
         boids = new GameObject[boidCreatureCount];
         for (int i = 0; i < boidCreatureCount; i++) {
             boids[i] = Instantiate(boidCreature);
@@ -46,6 +53,7 @@ public class BoidManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        avoidancePoint = avoidanceObject.transform.position;
         Vector3 center = Vector3.zero;
         Vector3 totalVelocity = Vector3.zero;
         foreach (GameObject boid in boids) {
@@ -55,6 +63,13 @@ public class BoidManager : MonoBehaviour {
         boidCenter = center / boidCreatureCount;
         boidSpeed = totalVelocity / boidCreatureCount;
         updateBoidNeighbours();
+        seekCounter -= Time.deltaTime;
+        if (seekCounter <= 0) {
+            seekCounter = seekPointChangeInterval;
+            Vector3 randomDir = new Vector3((2 * Random.value) - 1, (2 * Random.value) - 1, (2 * Random.value) - 1);
+            tendingPlace = randomDir.normalized * patrolDistance;
+        }
+
 	}
 
     public Vector3 getBoidCenter(Vector3 boidPosition) {
