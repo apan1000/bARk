@@ -17,7 +17,7 @@ namespace Vuforia
 
 		// Use this for initialization
 		void Start () {
-			mTrackableBehaviour = GetComponent<TrackableBehaviour>();
+			mTrackableBehaviour = transform.parent.GetComponent<TrackableBehaviour>();
 			if (mTrackableBehaviour)
 			{
 				mTrackableBehaviour.RegisterTrackableEventHandler(this);
@@ -129,7 +129,7 @@ namespace Vuforia
 		}
 
 		private void ShowBarkButtons() {
-			growStyleButtons = Instantiate(barkButtonsPrefab);
+			barkButtons = Instantiate(barkButtonsPrefab);
 		}
 	}
 }

@@ -17,6 +17,7 @@ public class ButtonScript : MonoBehaviour {
 	}
 	
 	public void SetTreeTexture() {
-		treeMaterial.mainTexture = GetComponent<Renderer>().sharedMaterial.mainTexture;
+		// Set emissionMap since albedo/mainTex won't show
+		treeMaterial.SetTexture("_EmissionMap", GetComponent<Renderer>().sharedMaterial.mainTexture);
 	}
 }
