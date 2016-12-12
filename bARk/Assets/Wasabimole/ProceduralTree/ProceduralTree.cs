@@ -88,7 +88,7 @@ namespace Wasabimole.ProceduralTree
         [Range(0f, 0.25f)]
         public float BranchProbability = 0.1f; // Branch probability
 		[Range(0f, 1f)]
-		public float GrowthMultiplier = 1f;
+		public float growthPercent = 1f;
 
 		public AnimationCurve curve;
 
@@ -108,6 +108,10 @@ namespace Wasabimole.ProceduralTree
         public MeshRenderer Renderer; // MeshRenderer component
 
         MeshFilter filter; // MeshFilter component
+
+		List<GameObject> leaves;
+		int leavesAmount;
+		int leafCount;
 
 #if UNITY_EDITOR
         [HideInInspector]
@@ -129,6 +133,46 @@ namespace Wasabimole.ProceduralTree
             if (filter.sharedMesh != null) checksum = checksumSerialized;
             Renderer = gameObject.GetComponent<MeshRenderer>();
             if (Renderer == null) Renderer = gameObject.AddComponent<MeshRenderer>();
+
+			leavesAmount = 51;
+
+
+			if (leaves == null) {
+				leaves = new List<GameObject> ();
+				Debug.Log ("new list");
+			} else {
+				//INTE BRA
+				Debug.Log (leavesAmount + " != " + leaves.Count);
+				if (leaves.Count != leavesAmount) {
+					foreach (GameObject l in leaves) {
+						if (Application.isPlaying) {
+							Destroy (l); 
+						} else {
+							DestroyImmediate (l);
+						}
+					}
+					leaves.Clear ();
+					for (int i = 0; i < leavesAmount; i++) {
+						GameObject leaf = GameObject.CreatePrimitive (PrimitiveType.Plane);
+						leaf.transform.parent = transform;
+						leaves.Add (leaf);
+						leaf.name = "leaf_" + i;
+						leaf.SetActive (false);
+						Debug.Log ("leaf created");
+					}
+				}
+			}
+
+
+
+
+			if (leaves.Count != leavesAmount) {
+
+
+				//TODO: behöver fixas så det inte blir massor av löv, kontrollera antalet
+
+
+			}
         }
 
         // ---------------------------------------------------------------------------------------------------------------------------
@@ -138,6 +182,10 @@ namespace Wasabimole.ProceduralTree
     public void GenerateTree()
     {
         gameObject.isStatic = false;
+			 
+		foreach (GameObject l in leaves) {
+			l.SetActive (false);
+		}
 
         var originalRotation = transform.localRotation;
         var originalSeed = Random.seed;
@@ -158,9 +206,10 @@ namespace Wasabimole.ProceduralTree
         SetTreeRingShape(); // Init shape array for current number of sides
 
         Random.seed = Seed;
+		leafCount = leavesAmount-1;
 
         // Main recursive call, starts creating the ring of vertices in the trunk's base
-        Branch(new Quaternion(), Vector3.zero, -1, BaseRadius, 0f, 0.1f);
+        Branch(new Quaternion(), Vector3.zero, -1, BaseRadius, 0f, 0.05f);
             
         Random.seed = originalSeed;
 
@@ -202,7 +251,7 @@ namespace Wasabimole.ProceduralTree
         // Main branch recursive function to generate tree
         // ---------------------------------------------------------------------------------------------------------------------------
 
-		void Branch(Quaternion quaternion, Vector3 position, int lastRingVertexIndex, float radius, float texCoordV, float growth)
+		void Branch(Quaternion quaternion, Vector3 position, int lastRingVertexIndex, float radius, float texCoordV, float growthCost)
         {
             var offset = Vector3.zero;
             var texCoord = new Vector2(0f, texCoordV);
@@ -213,7 +262,7 @@ namespace Wasabimole.ProceduralTree
             // Add ring vertices
             for (var n = 0; n <= NumberOfSides; n++, ang += angInc) 
             {
-				var r = ringShape[n] * radius * GrowthMultiplier;
+				var r = ringShape[n] * radius * growthPercent;
                 offset.x = r * Mathf.Cos(ang); // Get X, Z vertex offsets
                 offset.z = r * Mathf.Sin(ang);
                 vertexList.Add(position + quaternion * offset); // Add Vertex position
@@ -235,6 +284,14 @@ namespace Wasabimole.ProceduralTree
                 }
             }
 
+			if(leafCount >= 0 && radius < MinimumRadius * 4 && Random.value > 0.5f) {
+				leaves [leafCount].SetActive (true);
+				leaves [leafCount].transform.localPosition = position;
+				leaves [leafCount].transform.localScale = Vector3.one * radius * growthPercent * (Random.value + 1f);
+				leaves [leafCount].transform.localRotation = quaternion;
+				leafCount--;
+			}
+
             // Do we end current branch?
             radius *= RadiusStep;
             if (radius < MinimumRadius || vertexList.Count + NumberOfSides >= MaxNumVertices) // End branch if reached minimum radius, or ran out of vertices
@@ -248,14 +305,29 @@ namespace Wasabimole.ProceduralTree
                     triangleList.Add(vertexList.Count - 1);
                     triangleList.Add(n + 1);
                 }
+
+				//
+
                 return; 
             }
 
+			//TODO:Add leaf shader, not culling backfaces of planes
+			//Add leaves 
+
+
+
+
+
             // Continue current branch (randomizing the angle)
-			float grow = Random.value;// * Random.value * GrowthMultiplier);
+			//float grow = Random.value;// * Random.value * GrowthMultiplier);
             texCoordV += 0.0625f * (SegmentLength + SegmentLength / radius);
-			if (curve.Evaluate (GrowthMultiplier) > growth) {
-				position += quaternion * new Vector3 (0f, SegmentLength/growth /*growth*grow*curve.Evaluate(GrowthMultiplier)*/, 0f);
+			if (growthPercent >= growthCost) { // curve.Evaluate (GrowthMultiplier)
+				if (growthPercent <= growthCost * 1.1f) {
+					float mult = 1f / (growthCost*1.1f - growthCost);
+					position += quaternion * new Vector3 (0f, (growthPercent - growthCost) * mult * SegmentLength / (1 + growthCost), 0f);
+				} else {
+					position += quaternion * new Vector3 (0f, SegmentLength / (1 + growthCost), 0f);
+				}
 			}
             transform.rotation = quaternion; 
             var x = (Random.value - 0.5f) * Twisting;
@@ -263,7 +335,7 @@ namespace Wasabimole.ProceduralTree
             transform.Rotate(x, 0f, z);
             lastRingVertexIndex = vertexList.Count - NumberOfSides - 1;
 			//if (curve.Evaluate (GrowthMultiplier) < growth) return;
-			Branch(transform.rotation, position, lastRingVertexIndex, radius, texCoordV, growth*1.1f); // Next segment
+			Branch(transform.rotation, position, lastRingVertexIndex, radius, texCoordV, growthCost*1.1f); // Next segment
 
             // Do we branch?
 			if (vertexList.Count + NumberOfSides >= MaxNumVertices || Random.value > BranchProbability) return;
@@ -275,7 +347,7 @@ namespace Wasabimole.ProceduralTree
             z = Random.value * 70f - 35f;
             z += z > 0 ? 10f : -10f;
             transform.Rotate(x, 0f, z);
-			Branch(transform.rotation, position, lastRingVertexIndex, radius, texCoordV, growth + 0.1f);
+			Branch(transform.rotation, position, lastRingVertexIndex, radius, texCoordV, growthCost + 0.05f);
         }
 
         // ---------------------------------------------------------------------------------------------------------------------------
@@ -324,7 +396,7 @@ namespace Wasabimole.ProceduralTree
         {
             // Tree parameter checksum (add any new parameters here!)
             var newChecksum = (Seed & 0xFFFF) + NumberOfSides + SegmentLength + BaseRadius + MaxNumVertices +
-				RadiusStep + MinimumRadius + Twisting + BranchProbability + BranchRoundness + GrowthMultiplier;
+				RadiusStep + MinimumRadius + Twisting + BranchProbability + BranchRoundness + growthPercent;
 
             // Return (do nothing) unless tree parameters change
             if (newChecksum == checksum && filter.sharedMesh != null) return;
