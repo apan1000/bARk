@@ -90,7 +90,9 @@ namespace Wasabimole.ProceduralTree
 		[Range(0f, 1f)]
 		public float growthPercent = 1f;
 
-		public AnimationCurve curve;
+		//public AnimationCurve curve;
+		[Header("Leaf")]
+		public Material leafMaterial;
 
         // ---------------------------------------------------------------------------------------------------------------------------
         
@@ -150,16 +152,71 @@ namespace Wasabimole.ProceduralTree
 			Transform leafHolder = new GameObject (holderName).transform;
 			leafHolder.parent = transform;
 
+			float width = 3;
+			float height = 3;
+
+			// ---------------------------------------------------------------------------------------------------------------------------
+			// Leaf Generation
+			// ---------------------------------------------------------------------------------------------------------------------------
+
 			for (int i = 0; i < leafAmount; i++) {
-				GameObject leaf = GameObject.CreatePrimitive (PrimitiveType.Plane);
+
+				GameObject leaf = new GameObject ("leaf_" + i);
+				MeshFilter mf = leaf.gameObject.AddComponent<MeshFilter> ();
+				MeshRenderer mr = leaf.gameObject.AddComponent<MeshRenderer> ();
+				mr.material = leafMaterial;
+
+				Mesh mesh = new Mesh();
+				mf.mesh = mesh;
+
+				Vector3[] vertices = new Vector3[4];
+
+				vertices[0] = new Vector3(-width, 0, 0);
+				vertices[1] = new Vector3(width, 0, 0);
+				vertices[2] = new Vector3(-width, 2*height, 0);
+				vertices[3] = new Vector3(width, 2*height, 0);
+
+				mesh.vertices = vertices;
+
+				int[] tri = new int[6];
+
+				tri[0] = 0;
+				tri[1] = 2;
+				tri[2] = 1;
+
+				tri[3] = 2;
+				tri[4] = 3;
+				tri[5] = 1;
+
+				mesh.triangles = tri;
+
+				Vector3[] normals = new Vector3[4];
+
+				normals[0] = -Vector3.forward;
+				normals[1] = -Vector3.forward;
+				normals[2] = -Vector3.forward;
+				normals[3] = -Vector3.forward;
+
+				mesh.normals = normals;
+
+				Vector2[] uv = new Vector2[4];
+
+				uv[0] = new Vector2(0, 0);
+				uv[1] = new Vector2(1, 0);
+				uv[2] = new Vector2(0, 1);
+				uv[3] = new Vector2(1, 1);
+
+				mesh.uv = uv;
+
+
+
+				//GameObject leaf = GameObject.CreatePrimitive (PrimitiveType.Plane);
 				leaf.transform.parent = leafHolder;
 				leaves.Add (leaf);
-				leaf.name = "leaf_" + i;
 				leaf.SetActive (false);
 			}
 
 			/*
-
 
 			if (leaves.Count != leavesAmount) {
 				Debug.Log (leavesAmount + " != " + leaves.Count);
@@ -297,8 +354,11 @@ namespace Wasabimole.ProceduralTree
 				leaves [leafCount].SetActive (true);
 				leaves [leafCount].transform.localPosition = position;
 				leaves [leafCount].transform.localScale = Vector3.one * radius * growthPercent * (Random.value + 1f);
-				leaves [leafCount].transform.localRotation = quaternion;
+				Quaternion q = Quaternion.Euler (new Vector3 (0, Random.value * 180, 0));
+				leaves [leafCount].transform.localRotation = quaternion * q;
+
 				leafCount--;
+
 			}
 		
             // Do we end current branch?
