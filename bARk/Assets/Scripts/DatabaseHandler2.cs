@@ -21,16 +21,11 @@ public class DatabaseHandler2 : MonoBehaviour
         treeRef = reference.Child("Tree");
         treeRef.GetValueAsync().ContinueWith(ReadAllTrees);
 	}
-	
-    public void AddTree()
-    {
-        AddTreeToFirebase(12, 1231, 2, 1.3f, 1.5f, 0.3f, 2.4f, 12.1f, 12.2f, 0.4f, 0.5f);
-    }
 
     /// <summary>
     /// Adds a tree to firebase database
     /// </summary>
-    private void AddTreeToFirebase(int seed, int maxNumVertices, int numberOfSides, float baseRadius, float radiusStep, float minimumRadius,
+    public void AddTreeToFirebase(int seed, int maxNumVertices, int numberOfSides, float baseRadius, float radiusStep, float minimumRadius,
         float branchRoundness, float segmentLength, float twisting, float branchProbability, float growthPercent)
     {
         string key = treeRef.Push().Key;
