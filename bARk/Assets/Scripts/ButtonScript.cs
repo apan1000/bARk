@@ -8,7 +8,11 @@ public class ButtonScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		treeMaterial = GameObject.FindGameObjectWithTag("Tree").GetComponent<Renderer>().sharedMaterial;
+		foreach(Transform sibling in transform.parent.transform.parent.transform) { // in [imageTarget]
+			if(sibling.tag == "Tree")
+                 treeMaterial = sibling.GetComponent<Renderer>().sharedMaterial;
+         }
+		// treeMaterial = GameObject.FindGameObjectWithTag("Tree").GetComponent<Renderer>().sharedMaterial;
 	}
 	
 	// Update is called once per frame

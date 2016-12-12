@@ -17,7 +17,7 @@ namespace Vuforia
 
 		// Use this for initialization
 		void Start () {
-			mTrackableBehaviour = transform.parent.GetComponent<TrackableBehaviour>();
+			mTrackableBehaviour = transform.GetComponent<TrackableBehaviour>();
 			if (mTrackableBehaviour)
 			{
 				mTrackableBehaviour.RegisterTrackableEventHandler(this);
@@ -52,23 +52,11 @@ namespace Vuforia
 			#if UNITY_ANDROID
 			if(Input.touchCount > 0) {
 				if (Input.GetTouch(0).phase == TouchPhase.Began) {
-					
 					// Construct a ray from the current touch coordinates
 					Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
 					RaycastHit hit;
 					if (Physics.Raycast(ray, out hit)) {
-						if(hit.transform.gameObject.tag == "Button") {
-							if(currentMenu == 1) // Choosing bark
-							{
-								hit.transform.GetComponent<ButtonScript>().SetTreeTexture();
-								GoNext();
-							}
-							else if(true) //
-							{
-
-							}
-							
-						}
+						checkTouchHit(hit);
 					}
 				}
 			}
@@ -76,26 +64,28 @@ namespace Vuforia
 
 			#if UNITY_EDITOR
 			if (Input.GetMouseButtonDown(0)) {
-				
 				// Construct a ray from the current mouse coordinates
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 				RaycastHit hit;
 				if (Physics.Raycast(ray, out hit)) {
-					if(hit.transform.gameObject.tag == "Button") {
-						if(currentMenu == 1) // Choosing bark
-						{
-							hit.transform.GetComponent<ButtonScript>().SetTreeTexture();
-							GoNext();
-						}
-						else if(true) //
-						{
-
-						}
-						
-					}
+					checkTouchHit(hit);
 				}              
 			}
 			#endif
+		}
+
+		private void checkTouchHit(RaycastHit hit) {
+			if(hit.transform.gameObject.tag == "Button") {
+				if(currentMenu == 1) // Choosing bark
+				{
+					hit.transform.GetComponent<ButtonScript>().SetTreeTexture();
+					GoNext();
+				}
+				else if(true) //
+				{
+
+				}
+			}
 		}
 
 		public void GoNext() {
@@ -106,6 +96,7 @@ namespace Vuforia
 			}
 			else if (currentMenu == 1) // go from shaping tree to shaping leaves
 			{
+				RemoveBarkButtons();
 				// startLeafShaping();
 				currentMenu++;
 			} 
@@ -126,10 +117,20 @@ namespace Vuforia
 
 		private void ShowGrowStyleButtons() {
 			growStyleButtons = Instantiate(growStyleButtonsPrefab);
+			growStyleButtons.transform.parent = transform;
 		}
 
 		private void ShowBarkButtons() {
 			barkButtons = Instantiate(barkButtonsPrefab);
+			barkButtons.transform.parent = transform;
+		}
+
+		private void RemoveGrowStyleButtons() {
+			Destroy(growStyleButtons);
+		}
+
+		private void RemoveBarkButtons() {
+			Destroy(barkButtons);
 		}
 	}
 }
