@@ -16,9 +16,9 @@ public class Changer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Time.time > timeBetween && tree.GrowthMultiplier < 1) {
-			tree.GrowthMultiplier += 0.01f;
+		/*if (Time.time > timeBetween && tree.growth < 1) {
+			tree.growth += 0.01f;
 			timeBetween = Time.time+0.02f;
-		}
+		}*/
 	}
 }

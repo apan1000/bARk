@@ -40,7 +40,7 @@ public class BoidController : MonoBehaviour {
         Vector3 randomDir = new Vector3((2*Random.value)-1, (2 * Random.value) - 1, (2 * Random.value) - 1);
         randomDir = randomDir.normalized;
 
-        return (centerVelocity() + averageVelocity() + avoidanceVelocity() + tendToPlace(boidManager.tendingPlace) + randomDir * boidManager.randomness);
+        return (centerVelocity() + averageVelocity() + avoidanceVelocity() + tendToPlace(boidManager.tendingPlace) + avoidancePointVelocity() + randomDir * boidManager.randomness);
     }
 
     private Vector3 centerVelocity() {
@@ -70,5 +70,14 @@ public class BoidController : MonoBehaviour {
             }
         }
         return c;
+    }
+
+    private Vector3 avoidancePointVelocity() {
+        Vector3 avoidancePointDif = transform.localPosition - boidManager.avoidancePoint;
+        avoidancePointDif.y = 0;
+        if (avoidancePointDif.magnitude <= boidManager.avoidanceDistance) {
+            return avoidancePointDif * 2;
+        }
+        return Vector3.zero;
     }
 }
