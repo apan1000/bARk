@@ -81,9 +81,10 @@ namespace Vuforia
 					hit.transform.GetComponent<ButtonScript>().SetTreeTexture();
 					GoNext();
 				}
-				else if(true) //
+				else if(currentMenu == 3) //
 				{
-
+					hit.transform.GetComponent<ButtonScript>().SetGrowStyle();
+					GoNext();
 				}
 			}
 		}
@@ -94,19 +95,22 @@ namespace Vuforia
 				ShowBarkButtons();
 				currentMenu++;
 			}
-			else if (currentMenu == 1) // go from shaping tree to shaping leaves
+			else if (currentMenu == 1) // go from chosing bark to shaping leaves
 			{
 				RemoveBarkButtons();
 				// startLeafShaping();
 				currentMenu++;
+				GoNext(); // TOOD: REMOVE THIS and insert leaf shaping
 			} 
-			else if (currentMenu == 2) // go from shaping leaves to 
+			else if (currentMenu == 2) // go from shaping leaves to chosing grow style
 			{
 				// endLeafShaping();
+				ShowGrowStyleButtons();
 				currentMenu++;
 			}
-			else if (currentMenu == 3) //
+			else if (currentMenu == 3) // go from chosing grow style
 			{
+				RemoveGrowStyleButtons();
 				currentMenu++;
 			}
 			else if (currentMenu == 4) // go from planting tree back to viewing world
