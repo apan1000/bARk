@@ -110,7 +110,7 @@ namespace Wasabimole.ProceduralTree
         MeshFilter filter; // MeshFilter component
 
 		List<GameObject> leaves;
-		int leavesAmount;
+		int leafAmount;
 		int leafCount;
 
 #if UNITY_EDITOR
@@ -134,45 +134,54 @@ namespace Wasabimole.ProceduralTree
             Renderer = gameObject.GetComponent<MeshRenderer>();
             if (Renderer == null) Renderer = gameObject.AddComponent<MeshRenderer>();
 
-			leavesAmount = 51;
+			leafAmount = 52;
 
 
 			if (leaves == null) {
 				leaves = new List<GameObject> ();
-				Debug.Log ("new list");
-			} else {
-				//INTE BRA
-				Debug.Log (leavesAmount + " != " + leaves.Count);
-				if (leaves.Count != leavesAmount) {
-					foreach (GameObject l in leaves) {
-						if (Application.isPlaying) {
-							Destroy (l); 
-						} else {
-							DestroyImmediate (l);
-						}
-					}
-					leaves.Clear ();
-					for (int i = 0; i < leavesAmount; i++) {
-						GameObject leaf = GameObject.CreatePrimitive (PrimitiveType.Plane);
-						leaf.transform.parent = transform;
-						leaves.Add (leaf);
-						leaf.name = "leaf_" + i;
-						leaf.SetActive (false);
-						Debug.Log ("leaf created");
-					}
-				}
+				Debug.Log ("New leaf list created");
 			}
 
+			string holderName = "Leaf Holder";
+			if (transform.FindChild (holderName)) {
+				leaves.Clear ();
+				DestroyImmediate (transform.FindChild (holderName).gameObject);
+			}
+			Transform leafHolder = new GameObject (holderName).transform;
+			leafHolder.parent = transform;
 
+			for (int i = 0; i < leafAmount; i++) {
+				GameObject leaf = GameObject.CreatePrimitive (PrimitiveType.Plane);
+				leaf.transform.parent = leafHolder;
+				leaves.Add (leaf);
+				leaf.name = "leaf_" + i;
+				leaf.SetActive (false);
+			}
+
+			/*
 
 
 			if (leaves.Count != leavesAmount) {
-
-
-				//TODO: behöver fixas så det inte blir massor av löv, kontrollera antalet
-
-
+				Debug.Log (leavesAmount + " != " + leaves.Count);
+				foreach (GameObject l in leaves) {
+					if (Application.isPlaying) {
+						Destroy (l); 
+					} else {
+						DestroyImmediate (l);
+					}
+				}
+				leaves.Clear ();
+				for (int i = 0; i < leavesAmount; i++) {
+					GameObject leaf = GameObject.CreatePrimitive (PrimitiveType.Plane);
+					leaf.transform.parent = leafHolder;
+					leaves.Add (leaf);
+					leaf.name = "leaf_" + i;
+					leaf.SetActive (false);
+					Debug.Log ("leaf created");
+				}
 			}
+			*/
+
         }
 
         // ---------------------------------------------------------------------------------------------------------------------------
@@ -206,7 +215,7 @@ namespace Wasabimole.ProceduralTree
         SetTreeRingShape(); // Init shape array for current number of sides
 
         Random.seed = Seed;
-		leafCount = leavesAmount-1;
+		leafCount = leafAmount-1;
 
         // Main recursive call, starts creating the ring of vertices in the trunk's base
         Branch(new Quaternion(), Vector3.zero, -1, BaseRadius, 0f, 0.05f);
@@ -291,7 +300,7 @@ namespace Wasabimole.ProceduralTree
 				leaves [leafCount].transform.localRotation = quaternion;
 				leafCount--;
 			}
-
+		
             // Do we end current branch?
             radius *= RadiusStep;
             if (radius < MinimumRadius || vertexList.Count + NumberOfSides >= MaxNumVertices) // End branch if reached minimum radius, or ran out of vertices
