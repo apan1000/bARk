@@ -11,6 +11,8 @@ public class LeafDrawer : MonoBehaviour {
     private Vector3 endPoint;
     private LineRenderer lineRenderer;
 
+    public Color leafColor;
+
     public GameObject meshObject;
 
     private bool leafCreated = false;
@@ -23,8 +25,8 @@ public class LeafDrawer : MonoBehaviour {
         lineRenderer.SetWidth(0.1f, 0.1f);
 
 
-        Vector3 screenMidBottom = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width * 0.48f, Screen.height * 0.2f, zDist));
-        Vector3 screenMidBottom2 = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width * 0.52f,Screen.height * 0.2f, zDist));
+        Vector3 screenMidBottom = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width * 0.48f, 0, zDist));
+        Vector3 screenMidBottom2 = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width * 0.52f, 0, zDist));
         Vector3 screenMidMid = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width * 0.48f, Screen.height * 0.4f, zDist));
         endPoint = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width * 0.52f, Screen.height * 0.4f, zDist));
         points.Add(endPoint);
@@ -58,6 +60,7 @@ public class LeafDrawer : MonoBehaviour {
      //   Mesh invertedLeaf = reverseNormals(leaf);
         newLeaf.GetComponent<MeshFilter>().mesh = leaf;
         newLeaf.GetComponent<MeshCollider>().sharedMesh = leaf;
+       // newLeaf.transform.eulerAngles = new Vector3(0, 0, -90);
         leafCreated = true;
         newLeaf.transform.position = Vector3.zero;
         createLeafImage(200, 200);
@@ -81,20 +84,34 @@ public class LeafDrawer : MonoBehaviour {
                 //       Debug.Log("From: " + from + " To: " + to);
                 if (Physics.Raycast(from, to - from, out hit)) {
                     if (hit.transform.name == "Leaf(Clone)") {
-                        texture.SetPixel(x, y, Color.green);
-                        Debug.DrawLine(from, to, Color.green, 40.0f);
+                        texture.SetPixel(x, y, leafColor);
                     }
                 } else {
-                    Debug.DrawLine(from, to, Color.red, 40.0f);
                     texture.SetPixel(x, y, new Color(0, 0, 0, 0));
                 }
             }
         }
 
         texture.Apply();
+        Color32[] pixels = texture.GetPixels32();
+        pixels = rotateMatrix(pixels, texture.width, texture.height);
+        texture.SetPixels32(pixels);
+        texture.Apply();
         byte[] bytes = texture.EncodeToPNG();
         File.WriteAllBytes(Application.dataPath + "/Leaf.png", bytes);
 
+    }
+
+    private Color32[] rotateMatrix(Color32[] tex, int wid, int hi) {
+        Color32[] ret = new Color32[wid * hi];
+
+        for (int y = 0; y < hi; ++y) {
+            for (int x = 0; x < wid; ++x) {
+                ret[y + (wid - 1 - x) * hi] = tex[x + y * wid];
+            }
+        }
+
+        return ret;
     }
 
     private bool isOverlapping(Vector3 pos) {

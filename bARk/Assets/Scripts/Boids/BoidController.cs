@@ -45,17 +45,17 @@ public class BoidController : MonoBehaviour {
 
     private Vector3 centerVelocity() {
         Vector3 center = boidManager.getBoidCenter(transform.localPosition);
-        return (center - transform.localPosition) / 100;
+        return (center - transform.localPosition) / 10;
     }
 
     private Vector3 averageVelocity() {
         Vector3 speed = boidManager.getBoidSpeed();
 
-        return (speed - rigid.velocity) / 8;
+        return (speed - rigid.velocity) / 4;
     }
 
     private Vector3 tendToPlace(Vector3 position) {
-        return (position - transform.localPosition) / 2;
+        return (position - transform.localPosition) * 2;
     }
 
     private Vector3 avoidanceVelocity() {
