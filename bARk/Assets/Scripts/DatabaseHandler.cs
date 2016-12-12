@@ -84,7 +84,6 @@ public class DatabaseHandler : MonoBehaviour
     {
         info.text = "Writing data";
 
-
         addNewTree("björk", "dots", "12/19/2940", "poster1");
         addNewTree("tall", "groovy", "13/19/2940", "poster2"); 
         addNewTree("ek", "funkey", "14/19/2940", "poster3");
