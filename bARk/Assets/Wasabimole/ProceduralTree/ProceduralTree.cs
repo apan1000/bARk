@@ -171,10 +171,10 @@ namespace Wasabimole.ProceduralTree
 
 				Vector3[] vertices = new Vector3[4];
 
-				vertices[0] = new Vector3(-width, 0, 0);
-				vertices[1] = new Vector3(width, 0, 0);
-				vertices[2] = new Vector3(-width, 2*height, 0);
-				vertices[3] = new Vector3(width, 2*height, 0);
+				vertices[0] = new Vector3(0, -height/2, 0);
+				vertices[1] = new Vector3(width, -height/2, 0);
+				vertices[2] = new Vector3(0, height/2, 0);
+				vertices[3] = new Vector3(width, height/2, 0);
 
 				mesh.vertices = vertices;
 
@@ -301,12 +301,12 @@ namespace Wasabimole.ProceduralTree
             mesh.vertices = vertexList.ToArray();
             mesh.uv = uvList.ToArray();
             mesh.triangles = triangleList.ToArray();
-			/*
+
             // Update mesh
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
-            ; // Do not call this if we are going to change the mesh dynamically!
-			*/
+            // Do not call this if we are going to change the mesh dynamically!
+
 
 #if UNITY_EDITOR
             MeshInfo = "Mesh has " + vertexList.Count + " vertices and " + triangleList.Count / 3 + " triangles";
