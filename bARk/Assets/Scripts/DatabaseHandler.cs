@@ -124,34 +124,4 @@ public class DatabaseHandler : MonoBehaviour
     }
 }
 
-// Other classes
 
-public class ARTree
-{
-    private string name;
-    private string barkType;
-    private string plantDate;
-    private string trackingImage;
-    private string ownerID;
-
-    public ARTree(string name, string barkType, string plantDate, string trackingImage)
-    {
-        this.name = name;
-        this.barkType = barkType;
-        this.plantDate = plantDate;
-        this.trackingImage = trackingImage;
-    }
-
-    public Dictionary<string, object> ToDictionary()
-    {
-        Dictionary<string, object> result = new Dictionary<string, object>();
-        result["ownerID"] = ownerID;
-        result["name"] = name;
-        result["barkType"] = barkType;
-        result["plantDate"] = plantDate;
-        result["trackingImage"] = trackingImage;
-        result["trackingImage2"] = trackingImage;
-        result["trackingImage3"] = trackingImage;
-        return result;
-    }
-}
