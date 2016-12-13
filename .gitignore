@@ -36,3 +36,6 @@ sysinfo.txt
 *.apk
 *.unitypackage
 bARk/.vscode/
+bARk/Assets/SimpleFirebaseUnity/Plugins/Android.meta
+bARk/Assets/SimpleFirebaseUnity/Plugins/Editor.meta
+bARk/Assets/SimpleFirebaseUnity/Sample.meta
