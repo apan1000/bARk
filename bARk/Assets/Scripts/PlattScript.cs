@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlattScript : MonoBehaviour {
 
     public float growthtime = 0.1f;
-    public float targetScale = 1.0f;
+    public float targetScale = 20.0f;
 
 	// Use this for initialization
 	void Start () {

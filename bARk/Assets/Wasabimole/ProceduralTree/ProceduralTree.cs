@@ -137,7 +137,7 @@ namespace Wasabimole.ProceduralTree
             Renderer = gameObject.GetComponent<MeshRenderer>();
             if (Renderer == null) Renderer = gameObject.AddComponent<MeshRenderer>();
 
-			leafAmount = 152;
+			leafAmount = 100;
 
 
 			if (leaves == null) {
@@ -353,7 +353,7 @@ namespace Wasabimole.ProceduralTree
                     triangleList.Add(lastRingVertexIndex + 1);
                 }
             }
-			for (int i = 0; i < 2; i++) {
+			//for (int i = 0; i < 2; i++) {
 				if (leafCount >= 0 && radius < MinimumRadius * 4 && Random.value > 0.5f) {
 					leaves [leafCount].SetActive (true);
 					leaves [leafCount].transform.localPosition = position;
@@ -364,7 +364,7 @@ namespace Wasabimole.ProceduralTree
 					leafCount--;
 
 				}
-			}
+			//}
 		
             // Do we end current branch?
             radius *= RadiusStep;
@@ -409,19 +409,19 @@ namespace Wasabimole.ProceduralTree
             transform.Rotate(x, 0f, z);
             lastRingVertexIndex = vertexList.Count - NumberOfSides - 1;
 			//if (curve.Evaluate (GrowthMultiplier) < growth) return;
-			Branch(transform.rotation, position, lastRingVertexIndex, radius, texCoordV, growthCost*1.12f); // Next segment
+			Branch(transform.rotation, position, lastRingVertexIndex, radius, texCoordV, growthCost*1.1f); // Next segment
 
             // Do we branch?
 			if (vertexList.Count + NumberOfSides >= MaxNumVertices || Random.value > BranchProbability) return;
 
-            // Yes, add a new branch
+            // Yes, add a new branch 
             transform.rotation = quaternion;
             x = Random.value * 70f - 35f;
             x += x > 0 ? 10f : -10f;
             z = Random.value * 70f - 35f;
             z += z > 0 ? 10f : -10f;
             transform.Rotate(x, 0f, z);
-			Branch(transform.rotation, position, lastRingVertexIndex, radius, texCoordV, growthCost + 0.06f);
+			Branch(transform.rotation, position, lastRingVertexIndex, radius, texCoordV, growthCost + 0.05f);
         }
 
         // ---------------------------------------------------------------------------------------------------------------------------
