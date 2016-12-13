@@ -30,7 +30,7 @@ public class ButtonScript : MonoBehaviour {
 	}
 
 	public void SetGrowStyle() {
-		treeScript.growthPercent = 0.1f;
+		treeScript.growthPercent = 0f;
 		treeScript.BranchProbability = growStyle;
 	}
 }

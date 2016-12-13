@@ -137,12 +137,13 @@ namespace Wasabimole.ProceduralTree
             Renderer = gameObject.GetComponent<MeshRenderer>();
             if (Renderer == null) Renderer = gameObject.AddComponent<MeshRenderer>();
 
-			leafAmount = 100;
+			leafAmount = 82;
 
 
 			if (leaves == null) {
 				leaves = new List<GameObject> ();
 				Debug.Log ("New leaf list created");
+
 			}
 
 			string holderName = "Leaf Holder";
@@ -152,9 +153,10 @@ namespace Wasabimole.ProceduralTree
 			}
 			Transform leafHolder = new GameObject (holderName).transform;
 			leafHolder.parent = transform;
+            leafHolder.localScale = Vector3.one;
 
-			float width = 3;
-			float height = 3;
+			float width = 5;
+			float height = 5;
 
 			// ---------------------------------------------------------------------------------------------------------------------------
 			// Leaf Generation
