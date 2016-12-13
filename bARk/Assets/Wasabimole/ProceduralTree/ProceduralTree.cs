@@ -93,6 +93,7 @@ namespace Wasabimole.ProceduralTree
 		//public AnimationCurve curve;
 		[Header("Leaf")]
 		public Material leafMaterial;
+		public bool ShapeToggle;
 
         // ---------------------------------------------------------------------------------------------------------------------------
         
@@ -136,7 +137,7 @@ namespace Wasabimole.ProceduralTree
             Renderer = gameObject.GetComponent<MeshRenderer>();
             if (Renderer == null) Renderer = gameObject.AddComponent<MeshRenderer>();
 
-			leafAmount = 52;
+			leafAmount = 152;
 
 
 			if (leaves == null) {
@@ -160,57 +161,60 @@ namespace Wasabimole.ProceduralTree
 			// ---------------------------------------------------------------------------------------------------------------------------
 
 			for (int i = 0; i < leafAmount; i++) {
-
 				GameObject leaf = new GameObject ("leaf_" + i);
-				MeshFilter mf = leaf.gameObject.AddComponent<MeshFilter> ();
-				MeshRenderer mr = leaf.gameObject.AddComponent<MeshRenderer> ();
-				mr.material = leafMaterial;
 
-				Mesh mesh = new Mesh();
-				mf.mesh = mesh;
+				if (!ShapeToggle) {
+					
+					MeshFilter mf = leaf.gameObject.AddComponent<MeshFilter> ();
+					MeshRenderer mr = leaf.gameObject.AddComponent<MeshRenderer> ();
+					mr.material = leafMaterial;
 
-				Vector3[] vertices = new Vector3[4];
+					Mesh mesh = new Mesh ();
+					mf.mesh = mesh;
 
-				vertices[0] = new Vector3(0, -height/2, 0);
-				vertices[1] = new Vector3(width, -height/2, 0);
-				vertices[2] = new Vector3(0, height/2, 0);
-				vertices[3] = new Vector3(width, height/2, 0);
+					Vector3[] vertices = new Vector3[4];
 
-				mesh.vertices = vertices;
+					vertices [0] = new Vector3 (0, -height / 2, 0);
+					vertices [1] = new Vector3 (width, -height / 2, 0);
+					vertices [2] = new Vector3 (0, height / 2, 0);
+					vertices [3] = new Vector3 (width, height / 2, 0);
 
-				int[] tri = new int[6];
+					mesh.vertices = vertices;
 
-				tri[0] = 0;
-				tri[1] = 2;
-				tri[2] = 1;
+					int[] tri = new int[6];
 
-				tri[3] = 2;
-				tri[4] = 3;
-				tri[5] = 1;
+					tri [0] = 0;
+					tri [1] = 2;
+					tri [2] = 1;
 
-				mesh.triangles = tri;
+					tri [3] = 2;
+					tri [4] = 3;
+					tri [5] = 1;
 
-				Vector3[] normals = new Vector3[4];
+					mesh.triangles = tri;
 
-				normals[0] = -Vector3.forward;
-				normals[1] = -Vector3.forward;
-				normals[2] = -Vector3.forward;
-				normals[3] = -Vector3.forward;
+					Vector3[] normals = new Vector3[4];
 
-				mesh.normals = normals;
+					normals [0] = -Vector3.forward;
+					normals [1] = -Vector3.forward;
+					normals [2] = -Vector3.forward;
+					normals [3] = -Vector3.forward;
 
-				Vector2[] uv = new Vector2[4];
+					mesh.normals = normals; 
 
-				uv[0] = new Vector2(0, 0);
-				uv[1] = new Vector2(1, 0);
-				uv[2] = new Vector2(0, 1);
-				uv[3] = new Vector2(1, 1);
+					Vector2[] uv = new Vector2[4];
 
-				mesh.uv = uv;
+					uv [0] = new Vector2 (0, 0);
+					uv [1] = new Vector2 (1, 0);
+					uv [2] = new Vector2 (0, 1);
+					uv [3] = new Vector2 (1, 1);
 
+					mesh.uv = uv;
+				} else {
+					leaf = GameObject.CreatePrimitive (Random.value > 0.5f ? PrimitiveType.Cube : PrimitiveType.Sphere);
+					leaf.GetComponent<MeshRenderer> ().material = leafMaterial;
+				}
 
-
-				//GameObject leaf = GameObject.CreatePrimitive (PrimitiveType.Plane);
 				leaf.transform.parent = leafHolder;
 				leaves.Add (leaf);
 				leaf.SetActive (false);
@@ -344,21 +348,22 @@ namespace Wasabimole.ProceduralTree
                     triangleList.Add(lastRingVertexIndex + 1); // Triangle A
                     triangleList.Add(lastRingVertexIndex);
                     triangleList.Add(currentRingVertexIndex);
-                    triangleList.Add(currentRingVertexIndex); // Triangle B
+                    triangleList.Add(currentRingVertexIndex); // Triangle B 
                     triangleList.Add(currentRingVertexIndex + 1);
                     triangleList.Add(lastRingVertexIndex + 1);
                 }
             }
+			for (int i = 0; i < 2; i++) {
+				if (leafCount >= 0 && radius < MinimumRadius * 4 && Random.value > 0.5f) {
+					leaves [leafCount].SetActive (true);
+					leaves [leafCount].transform.localPosition = position;
+					leaves [leafCount].transform.localScale = Vector3.one * radius * growthPercent * (Random.value + 1f);
+					Quaternion q = Quaternion.Euler (new Vector3 (0, Random.value * 360, 0));
+					leaves [leafCount].transform.localRotation = quaternion * q;
 
-			if(leafCount >= 0 && radius < MinimumRadius * 4 && Random.value > 0.5f) {
-				leaves [leafCount].SetActive (true);
-				leaves [leafCount].transform.localPosition = position;
-				leaves [leafCount].transform.localScale = Vector3.one * radius * growthPercent * (Random.value + 1f);
-				Quaternion q = Quaternion.Euler (new Vector3 (0, Random.value * 180, 0));
-				leaves [leafCount].transform.localRotation = quaternion * q;
+					leafCount--;
 
-				leafCount--;
-
+				}
 			}
 		
             // Do we end current branch?
@@ -404,7 +409,7 @@ namespace Wasabimole.ProceduralTree
             transform.Rotate(x, 0f, z);
             lastRingVertexIndex = vertexList.Count - NumberOfSides - 1;
 			//if (curve.Evaluate (GrowthMultiplier) < growth) return;
-			Branch(transform.rotation, position, lastRingVertexIndex, radius, texCoordV, growthCost*1.1f); // Next segment
+			Branch(transform.rotation, position, lastRingVertexIndex, radius, texCoordV, growthCost*1.12f); // Next segment
 
             // Do we branch?
 			if (vertexList.Count + NumberOfSides >= MaxNumVertices || Random.value > BranchProbability) return;
@@ -416,7 +421,7 @@ namespace Wasabimole.ProceduralTree
             z = Random.value * 70f - 35f;
             z += z > 0 ? 10f : -10f;
             transform.Rotate(x, 0f, z);
-			Branch(transform.rotation, position, lastRingVertexIndex, radius, texCoordV, growthCost + 0.05f);
+			Branch(transform.rotation, position, lastRingVertexIndex, radius, texCoordV, growthCost + 0.06f);
         }
 
         // ---------------------------------------------------------------------------------------------------------------------------
