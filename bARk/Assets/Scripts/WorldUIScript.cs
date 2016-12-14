@@ -14,6 +14,7 @@ namespace Vuforia
 		private int currentMenu = 0;
 		private TrackableBehaviour mTrackableBehaviour;
 		private bool trackableSeen = false;
+        private TreeDatabaseHandler treeDatabase;
 
 		// Use this for initialization
 		void Start () {
@@ -22,6 +23,7 @@ namespace Vuforia
 			{
 				mTrackableBehaviour.RegisterTrackableEventHandler(this);
 			}
+            treeDatabase = GetComponent<TreeDatabaseHandler>();
 		}
 		
 		// Update is called once per frame
@@ -115,6 +117,7 @@ namespace Vuforia
 			}
 			else if (currentMenu == 4) // go from planting tree back to viewing world
 			{
+                treeDatabase.SaveTree(); // Save the newly created tree to the database
 				currentMenu = 0;
 			}
 		}

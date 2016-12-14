@@ -5,7 +5,6 @@ using Wasabimole;
 
 public class Changer : MonoBehaviour
 {
-    public DatabaseHandler2 database;
 	Wasabimole.ProceduralTree.ProceduralTree tree;
 	float timeBetween;
 	Transform cam;
@@ -13,7 +12,6 @@ public class Changer : MonoBehaviour
 	// Use this for initialization
 	void Start () {
 		tree = GetComponent<Wasabimole.ProceduralTree.ProceduralTree>();
-        StartCoroutine(SaveTree());
 		cam = Camera.main.transform;
 	}
 	
@@ -27,12 +25,4 @@ public class Changer : MonoBehaviour
 		// tree.growthPercent = Mathf.Clamp( Mathf.Abs( 0.005f * Vector3.Magnitude(cam.position - transform.position)),0f,1f);
 
 	}
-
-    IEnumerator SaveTree()
-    {
-        yield return new WaitForSeconds(3);
-        database.AddTreeToFirebase(tree.Seed, tree.MaxNumVertices, tree.NumberOfSides, tree.BaseRadius,
-            tree.RadiusStep, tree.MinimumRadius, tree.BranchProbability, tree.SegmentLength, tree.Twisting,
-            tree.BranchProbability, tree.growthPercent);
-    }
 }
