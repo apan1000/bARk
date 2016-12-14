@@ -17,6 +17,8 @@ public class DatabaseHandler : MonoBehaviour
     DatabaseReference treeRef;
     List<ARTree> allTrees;
 
+    bool treesLoaded = false;
+
 	void Awake()
     {
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://bark-11fd5.firebaseio.com/");
@@ -58,7 +60,7 @@ public class DatabaseHandler : MonoBehaviour
     /// <param name="task"></param>
     private void GetTrees(Task<DataSnapshot> task)
     {
-        List<ARTree> allTrees = new List<ARTree>();
+        allTrees = new List<ARTree>();
         if (task.IsFaulted)
             Debug.Log("Failed to Load");
         else if (task.IsCompleted)
@@ -69,7 +71,18 @@ public class DatabaseHandler : MonoBehaviour
                 ARTree newTree = new ARTree(tree);
                 allTrees.Add(newTree);
             }
+            treesLoaded = true;
         }
-        TreesLoaded(allTrees);
+    }
+
+    // Event cal has to be called on main thread, to avoid 
+    // issues in functions responding to this event.
+    void Update()
+    {
+        if (treesLoaded)
+        {
+            TreesLoaded(allTrees);
+            treesLoaded = false;
+        }
     }
 }
