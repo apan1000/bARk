@@ -93,7 +93,7 @@ namespace Vuforia
                 if(currentMenu == 1) // Start to build has been pressed
                 {
                     if (hit.transform.gameObject.name == "NextTreeButton")
-                        ShowNextTree();
+                        ShowNextTree(false);
                     else
                         GoNext();
                 }
@@ -158,8 +158,7 @@ namespace Vuforia
 			{
                 editableTree.SetActive(false); // Hide build tree
                 RemoveBackToMainButton();
-                ShowNextTree();
-                showBuildButton();
+                ShowNextTree(true);
 				currentMenu = 0;
                 GoNext();
 			}
@@ -221,11 +220,18 @@ namespace Vuforia
         }
 
         /// <summary>
-        /// Cycles through display-trees
+        /// Show the next displayTree.
+        /// True for show last, false for normal.
         /// </summary>
-        public void ShowNextTree()
+        public void ShowNextTree(bool showLast)
         {
             if (displayTrees.transform.childCount == 0) return;
+            if (showLast)
+            {
+                currentDisplayed = displayTrees.transform.childCount - 1;
+                displayTrees.transform.GetChild(currentDisplayed).gameObject.SetActive(true);
+                return;
+            }
             // Hide currently displayed
             displayTrees.transform.GetChild(currentDisplayed).gameObject.SetActive(false);
             // Get next index
