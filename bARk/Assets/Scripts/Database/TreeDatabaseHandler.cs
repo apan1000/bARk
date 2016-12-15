@@ -16,6 +16,7 @@ public class TreeDatabaseHandler : MonoBehaviour
     public GameObject rootTree;
 
     private ProceduralTree tree;
+    private Renderer treeMaterial;
     private List<ARTree> treesToAdd;
     private List<ARTree> treesToRemove;
     private bool firstTree = true;
@@ -26,7 +27,10 @@ public class TreeDatabaseHandler : MonoBehaviour
         foreach (Transform child in transform)
         {
             if (child.tag == "Tree")
+            {
                 tree = child.GetComponent<ProceduralTree>();
+                treeMaterial = child.GetComponent<Renderer>();
+            }
         }
         treesToAdd = new List<ARTree>();
         treesToRemove = new List<ARTree>();
@@ -39,10 +43,10 @@ public class TreeDatabaseHandler : MonoBehaviour
     /// </summary>
     public void SaveTree()
     {
-        Debug.Log("Tree saved!");
+        string materialName = treeMaterial.material.name;
         database.AddTreeToFirebase(tree.Seed, tree.MaxNumVertices, tree.NumberOfSides, tree.BaseRadius,
            tree.RadiusStep, tree.MinimumRadius, tree.BranchProbability, tree.SegmentLength, tree.Twisting,
-           tree.BranchProbability, tree.growthPercent);
+           tree.BranchProbability, tree.growthPercent, materialName);
     }
 
     /// <summary>

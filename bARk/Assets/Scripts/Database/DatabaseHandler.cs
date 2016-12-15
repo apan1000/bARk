@@ -62,11 +62,11 @@ public class DatabaseHandler : MonoBehaviour
     /// Adds a tree to firebase database
     /// </summary>
     public void AddTreeToFirebase(int seed, int maxNumVertices, int numberOfSides, float baseRadius, float radiusStep, float minimumRadius,
-        float branchRoundness, float segmentLength, float twisting, float branchProbability, float growthPercent)
+        float branchRoundness, float segmentLength, float twisting, float branchProbability, float growthPercent, string matName)
     {
         string key = treeRef.Push().Key;
         ARTree myTree = new ARTree(seed, maxNumVertices, numberOfSides, baseRadius, radiusStep, minimumRadius,
-        branchRoundness, segmentLength, twisting, branchProbability, growthPercent, key);
+        branchRoundness, segmentLength, twisting, branchProbability, growthPercent, key, matName);
 
         myTree.ConvertToString(leafTex);
         Dictionary<string, object> entryVal = myTree.ToDictionary();
