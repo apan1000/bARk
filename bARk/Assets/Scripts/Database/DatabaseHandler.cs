@@ -11,7 +11,8 @@ public class DatabaseHandler : MonoBehaviour
 {
     public delegate void DatabaseEvent(List<ARTree> allTrees);
     public static event DatabaseEvent TreesLoaded;
-    public static event DatabaseEvent NewTreeAdded;
+    public delegate void DatabaseEvent2(ARTree tree);
+    public static event DatabaseEvent2 NewTreeAdded;
 
     public Texture2D leafTex;
 
@@ -20,12 +21,17 @@ public class DatabaseHandler : MonoBehaviour
     List<ARTree> allTrees;
 
     bool treesLoaded = false;
+    DatabaseReference treeEvent;
 
 	void Awake()
     {
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://bark-11fd5.firebaseio.com/");
         rootRef = FirebaseDatabase.DefaultInstance.RootReference;
         treeRef = rootRef.Child("Trees");
+
+        // Listen for events 
+        treeEvent = FirebaseDatabase.DefaultInstance.GetReference("Trees");
+
     }
 
     void Start()
@@ -35,8 +41,23 @@ public class DatabaseHandler : MonoBehaviour
 
     private void NewTree(object sender, ChildChangedEventArgs args)
     {
-        Debug.Log("NEW TREE FOUND ON DATABASE!!!");
-        NewTreeAdded(null);
+        Debug.Log("New tree found!!");
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+        // ONLY ONE AT A TIME
+        DataSnapshot snap = args.Snapshot;
+        ARTree newTree = new ARTree(snap);
+        NewTreeAdded(newTree);
+
+    }
+
+    private void TreeRemoved(object sender, ChildChangedEventArgs args)
+    {
+        Debug.Log("--Tree Removed!");
+
     }
 
     /// <summary>
@@ -47,7 +68,7 @@ public class DatabaseHandler : MonoBehaviour
     {
         string key = treeRef.Push().Key;
         ARTree myTree = new ARTree(seed, maxNumVertices, numberOfSides, baseRadius, radiusStep, minimumRadius,
-        branchRoundness, segmentLength, twisting, branchProbability, growthPercent);
+        branchRoundness, segmentLength, twisting, branchProbability, growthPercent, key);
 
         myTree.ConvertToString(leafTex);
         Dictionary<string, object> entryVal = myTree.ToDictionary();
@@ -63,7 +84,7 @@ public class DatabaseHandler : MonoBehaviour
     public List<ARTree> GetAllTrees()
     {
         allTrees = new List<ARTree>();
-        treeRef.GetValueAsync().ContinueWith(GetTrees);
+        treeEvent.GetValueAsync().ContinueWith(GetTrees);
         return allTrees;
     }
 
@@ -95,8 +116,17 @@ public class DatabaseHandler : MonoBehaviour
         if (treesLoaded)
         {
             TreesLoaded(allTrees);
-            treeRef.StartAt(allTrees.Count).ChildAdded += NewTree;
             treesLoaded = false;
+
+            // Start listenting after changes when trees has been loaded
+            treeEvent.ChildAdded += NewTree;
+            treeEvent.ChildRemoved += TreeRemoved;
         }
+    }
+
+    void OnDestroy()
+    {
+        treeRef.StartAt(allTrees.Count).ChildAdded -= NewTree;
+        treeRef.ChildRemoved -= TreeRemoved;
     }
 }

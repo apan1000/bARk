@@ -225,6 +225,7 @@ namespace Vuforia
         /// </summary>
         public void ShowNextTree()
         {
+            if (displayTrees.transform.childCount == 0) return;
             // Hide currently displayed
             displayTrees.transform.GetChild(currentDisplayed).gameObject.SetActive(false);
             // Get next index
