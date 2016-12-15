@@ -25,6 +25,7 @@ public class WorldUIScript : MonoBehaviour, ITrackableEventHandler {
 
     private GameObject growStyleButtons, barkButtons;
     private GameObject buildButton, backToMainButton;
+	private GameObject leafDrawer;
 	private int currentMenu = 0;
 	private TrackableBehaviour mTrackableBehaviour;
 	private bool trackableSeen = false;
@@ -213,14 +214,14 @@ public class WorldUIScript : MonoBehaviour, ITrackableEventHandler {
     }
 
     private void startLeafShaping() {
-        leafDrawerPrefab.SetActive(true);
+		leafDrawer = Instantiate(leafDrawerPrefab);
         foreach (GameObject obj in onDrawingDisable) {
             obj.SetActive(false);
         }
     }
 
     private void endLeafShaping() {
-        Destroy(leafDrawerPrefab);
+        Destroy(leafDrawer);
         Destroy(GameObject.Find("NextButton(Clone)"));
         foreach (GameObject obj in onDrawingDisable) {
             obj.SetActive(true);
