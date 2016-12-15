@@ -13,7 +13,7 @@ public class DatabaseHandler : MonoBehaviour
     public static event DatabaseEvent NewTreeAdded;
     public static event DatabaseEvent NewTreeToRemove;
 
-    public Texture2D leafTex;
+    public Material leafMat;
 
     DatabaseReference rootRef;
     DatabaseReference treeRef;
@@ -68,7 +68,7 @@ public class DatabaseHandler : MonoBehaviour
         ARTree myTree = new ARTree(seed, maxNumVertices, numberOfSides, baseRadius, radiusStep, minimumRadius,
         branchRoundness, segmentLength, twisting, branchProbability, growthPercent, key, matName);
 
-        myTree.ConvertToString(leafTex);
+        myTree.ConvertToString(leafMat.mainTexture as Texture2D);
         Dictionary<string, object> entryVal = myTree.ToDictionary();
 
         Dictionary<string, object> childUpdate = new Dictionary<string, object>();
