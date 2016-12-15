@@ -30,12 +30,12 @@ public class DatabaseHandler : MonoBehaviour
 
     void Start()
     {
-        treeRef.LimitToFirst(1).ChildAdded += NewTree;
+        //treeRef.LimitToFirst(1).ChildAdded += NewTree;
     }
 
     private void NewTree(object sender, ChildChangedEventArgs args)
     {
-
+        Debug.Log("NEW TREE FOUND ON DATABASE!!!");
         NewTreeAdded(null);
     }
 
@@ -95,6 +95,7 @@ public class DatabaseHandler : MonoBehaviour
         if (treesLoaded)
         {
             TreesLoaded(allTrees);
+            treeRef.StartAt(allTrees.Count).ChildAdded += NewTree;
             treesLoaded = false;
         }
     }

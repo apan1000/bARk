@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Wasabimole.ProceduralTree;
 
-public class TreeDatabaseHandler : MonoBehaviour {
+public class TreeDatabaseHandler : MonoBehaviour
+{
     [Header("Database")]
     public DatabaseHandler database;
     [Header("Tree")]
@@ -20,10 +21,19 @@ public class TreeDatabaseHandler : MonoBehaviour {
             if (child.tag == "Tree")
                 tree = child.GetComponent<ProceduralTree>();
         }
-        
-        //StartCoroutine(SaveTree());
         database.GetAllTrees(); // STarts a thread in database that looks for trees
         DatabaseHandler.TreesLoaded += LoadedTrees; // Listen for when trees are found
+    }
+
+    /// <summary>
+    /// Saves the newly created tree to the database.
+    /// </summary>
+    public void SaveTree()
+    {
+        Debug.Log("Tree saved!");
+        database.AddTreeToFirebase(tree.Seed, tree.MaxNumVertices, tree.NumberOfSides, tree.BaseRadius,
+           tree.RadiusStep, tree.MinimumRadius, tree.BranchProbability, tree.SegmentLength, tree.Twisting,
+           tree.BranchProbability, tree.growthPercent);
     }
 
     /// <summary>
@@ -51,7 +61,7 @@ public class TreeDatabaseHandler : MonoBehaviour {
             script.BranchProbability = tree.branchProbability;
             script.growthPercent = 1.0f;// tree.growthPercent;
 
-            // Set correct leaf-texture
+            // Set correct leaf-material
             tree.ConvertToTexture();
             Material m = new Material(Shader.Find("Custom/LeafShader"));
             m.mainTexture = tree.leafTexture;
@@ -67,17 +77,6 @@ public class TreeDatabaseHandler : MonoBehaviour {
 
             showFirst = false;  
         }
-    }
-
-    /// <summary>
-    /// Saves the newly created tree to the database.
-    /// </summary>
-    public void SaveTree()
-    {
-        Debug.Log("Tree saved!");
-        database.AddTreeToFirebase(tree.Seed, tree.MaxNumVertices, tree.NumberOfSides, tree.BaseRadius,
-           tree.RadiusStep, tree.MinimumRadius, tree.BranchProbability, tree.SegmentLength, tree.Twisting,
-           tree.BranchProbability, tree.growthPercent);
     }
 
     private void OnDestroy()

@@ -10,6 +10,7 @@ namespace Vuforia
 		public GameObject growStyleButtonsPrefab;
 		public GameObject barkButtonsPrefab;
         public GameObject leafDrawerPrefab;
+        public GameObject backToMainPrefab;
 
         public GameObject[] onDrawingDisable;
 
@@ -19,7 +20,7 @@ namespace Vuforia
         public GameObject displayTrees;
 
         private GameObject growStyleButtons, barkButtons;
-        private GameObject buildButton;
+        private GameObject buildButton, backToMainButton;
 		private int currentMenu = 0;
 		private TrackableBehaviour mTrackableBehaviour;
 		private bool trackableSeen = false;
@@ -110,6 +111,11 @@ namespace Vuforia
 					hit.transform.GetComponent<ButtonScript>().SetGrowStyle();
 					GoNext();
 				}
+                else if(currentMenu == 5)
+                {
+                    if (hit.transform.gameObject.name == "BackToMainButton")
+                        GoNext();
+                }
 			}
 		}
 
@@ -122,7 +128,7 @@ namespace Vuforia
             }
 			else if (currentMenu == 1) // go from coosing build to chosing bark
 			{
-                editableTree.SetActive(true);
+                editableTree.SetActive(true); // Show build tree
                 HideDispTrees();
                 RemoveBuildButton();
 				ShowBarkButtons();
@@ -131,7 +137,7 @@ namespace Vuforia
 			else if (currentMenu == 2) // go from chosing bark to shaping leaves
 			{
 				RemoveBarkButtons();
-				startLeafShaping();
+				startLeafShaping(); // New leaf is not applied to the tree.
 				currentMenu++;
 			//	GoNext(); // TOOD: REMOVE THIS and insert leaf shaping
 			} 
@@ -145,11 +151,17 @@ namespace Vuforia
 			{
 				RemoveGrowStyleButtons();
                 treeDatabase.SaveTree(); // Save the newly created tree to the database
+                ShowBackToMainButton();
                 currentMenu++;
 			}
 			else if (currentMenu == 5) // go from planting tree back to viewing world
 			{
+                editableTree.SetActive(false); // Hide build tree
+                RemoveBackToMainButton();
+                ShowNextTree();
+                showBuildButton();
 				currentMenu = 0;
+                GoNext();
 			}
 		}
 
@@ -165,9 +177,14 @@ namespace Vuforia
 
         private void showBuildButton()
         {
-            Debug.Log("Show the build button");
             buildButton = Instantiate(buildButtonPrefab);
             buildButton.transform.parent = transform;
+        }
+
+        private void ShowBackToMainButton()
+        {
+            backToMainButton = Instantiate(backToMainPrefab);
+            backToMainButton.transform.parent = transform;
         }
 
         private void RemoveGrowStyleButtons() {
@@ -181,6 +198,11 @@ namespace Vuforia
         private void RemoveBuildButton()
         {
             Destroy(buildButton);
+        }
+
+        private void RemoveBackToMainButton()
+        {
+            Destroy(backToMainButton);
         }
 
         private void startLeafShaping() {
