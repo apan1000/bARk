@@ -13,8 +13,11 @@ public class BoidManager : MonoBehaviour {
     public float maxSpeed = 5.0f;
     public float minNeighbourDistance = 0.2f;
     public float avoidanceDistance = 2.0f;
+    public float cameraAvoidanceDistance = 5.0f;
     public float randomness = 1.0f;
     public float patrolDistance = 20.0f;
+    public float minHeight = 10;
+    public float maxHeight = 30;
 
     private float lastTime = 0;
     private int lastNeighbourUpdate = 0;
@@ -37,6 +40,7 @@ public class BoidManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        avoidanceObject = GameObject.FindGameObjectWithTag("Tree").transform;
         seekCounter = seekPointChangeInterval;
         boids = new GameObject[boidCreatureCount];
         for (int i = 0; i < boidCreatureCount; i++) {
@@ -63,14 +67,18 @@ public class BoidManager : MonoBehaviour {
         boidCenter = center / boidCreatureCount;
         boidSpeed = totalVelocity / boidCreatureCount;
         updateBoidNeighbours();
+        updateSeekPoint();
+	}
+
+    private void updateSeekPoint() {
         seekCounter -= Time.deltaTime;
         if (seekCounter <= 0) {
             seekCounter = seekPointChangeInterval;
             Vector3 randomDir = new Vector3((2 * Random.value) - 1, (2 * Random.value) - 1, (2 * Random.value) - 1);
             tendingPlace = randomDir.normalized * patrolDistance;
+            tendingPlace.y = Random.Range(minHeight, maxHeight);
         }
-
-	}
+    }
 
     public Vector3 getBoidCenter(Vector3 boidPosition) {
         return ((boidCenter*boidCreatureCount - boidPosition)/(boidCreatureCount-1));

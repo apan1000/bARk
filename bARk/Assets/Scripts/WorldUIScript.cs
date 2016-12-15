@@ -22,6 +22,8 @@ public class WorldUIScript : MonoBehaviour, ITrackableEventHandler {
 
     [Header("Environment")]
     public GameObject platts;
+    public GameObject boid;
+    private GameObject activeBoid;
 
     private GameObject growStyleButtons, barkButtons;
     private GameObject buildButton, backToMainButton;
@@ -159,6 +161,7 @@ public class WorldUIScript : MonoBehaviour, ITrackableEventHandler {
 		else if (currentMenu == 4) // go from chosing grow style
 		{
 			RemoveGrowStyleButtons();
+            activeBoid = Instantiate(boid, new Vector3(0, 5, 0), Quaternion.identity);
             treeDatabase.SaveTree(); // Save the newly created tree to the database
             ShowBackToMainButton();
             currentMenu++;
@@ -166,6 +169,7 @@ public class WorldUIScript : MonoBehaviour, ITrackableEventHandler {
 		else if (currentMenu == 5) // go from planting tree back to viewing world
 		{
             editableTree.SetActive(false); // Hide build tree
+            Destroy(activeBoid);
             RemoveBackToMainButton();
             ShowNextTree(true);
 			currentMenu = 0;

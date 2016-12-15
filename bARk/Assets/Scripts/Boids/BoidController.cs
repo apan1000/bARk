@@ -8,6 +8,7 @@ public class BoidController : MonoBehaviour {
     private BoidManager boidManager;
 
     public GameObject[] neighbours;
+    public float tdist;
 
     private Rigidbody rigid;
 
@@ -29,6 +30,7 @@ public class BoidController : MonoBehaviour {
         } else if (speed < boidManager.minSpeed) {
             rigid.velocity = rigid.velocity.normalized * boidManager.minSpeed;
         }
+        transform.forward = rigid.velocity;
     }
 
     public void setBoidManager(GameObject manager) {
@@ -40,12 +42,13 @@ public class BoidController : MonoBehaviour {
         Vector3 randomDir = new Vector3((2*Random.value)-1, (2 * Random.value) - 1, (2 * Random.value) - 1);
         randomDir = randomDir.normalized;
 
-        return (centerVelocity() + averageVelocity() + avoidanceVelocity() + tendToPlace(boidManager.tendingPlace) + avoidancePointVelocity() + randomDir * boidManager.randomness);
+        return (centerVelocity() + averageVelocity() + avoidanceVelocity() + tendToPlace(boidManager.tendingPlace) + 
+            avoidancePointVelocity() + cameraAvoidanceVelocity() + randomDir * boidManager.randomness);
     }
 
     private Vector3 centerVelocity() {
         Vector3 center = boidManager.getBoidCenter(transform.localPosition);
-        return (center - transform.localPosition) / 10;
+        return (center - transform.localPosition) * 5.0f;
     }
 
     private Vector3 averageVelocity() {
@@ -76,8 +79,23 @@ public class BoidController : MonoBehaviour {
         Vector3 avoidancePointDif = transform.localPosition - boidManager.avoidancePoint;
         avoidancePointDif.y = 0;
         if (avoidancePointDif.magnitude <= boidManager.avoidanceDistance) {
-            return avoidancePointDif * 2;
+            return avoidancePointDif.normalized * 500 / avoidancePointDif.magnitude;
         }
         return Vector3.zero;
     }
+
+    /// <summary>
+    /// Attempts to steer boid away from the camera.
+    /// </summary>
+    /// <returns>Velocity equal to direction away from camera if too close, zero vector if not. </returns>
+    private Vector3 cameraAvoidanceVelocity() {
+        Vector3 dif = transform.localPosition - Camera.main.transform.position;
+        tdist = dif.magnitude;
+        if (dif.magnitude <= boidManager.cameraAvoidanceDistance) {
+            dif.y = 0;
+            return dif.normalized * 20;
+        }
+        return Vector3.zero;
+    }
+
 }
