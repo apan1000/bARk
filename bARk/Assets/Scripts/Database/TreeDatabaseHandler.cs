@@ -43,7 +43,9 @@ public class TreeDatabaseHandler : MonoBehaviour
     /// </summary>
     public void SaveTree()
     {
-        string materialName = treeMaterial.material.name;
+
+
+        string materialName = treeMaterial.sharedMaterial.mainTexture.name;
         database.AddTreeToFirebase(tree.Seed, tree.MaxNumVertices, tree.NumberOfSides, tree.BaseRadius,
            tree.RadiusStep, tree.MinimumRadius, tree.BranchProbability, tree.SegmentLength, tree.Twisting,
            tree.BranchProbability, tree.growthPercent, materialName);
