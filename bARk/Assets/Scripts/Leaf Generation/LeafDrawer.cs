@@ -21,6 +21,7 @@ public class LeafDrawer : MonoBehaviour {
     public Color stemColor;
 
     public GameObject meshObject;
+    public Material leafMaterial;
     public GameObject nextButton;
 
     private bool leafCreated = false;
@@ -133,6 +134,7 @@ public class LeafDrawer : MonoBehaviour {
         texture.Apply();
         byte[] bytes = texture.EncodeToPNG();
         File.WriteAllBytes(Application.persistentDataPath + "/Leaf.png", bytes);
+        leafMaterial.mainTexture = texture;
     }
 
     private Color32[] rotateMatrix(Color32[] tex, int wid, int hi) {
