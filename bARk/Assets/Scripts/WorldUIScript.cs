@@ -13,10 +13,18 @@ namespace Vuforia
 
         public GameObject[] onDrawingDisable;
 
-		private GameObject growStyleButtons, barkButtons;
+        public GameObject buildButtonPrefab;
+        [Header("Tree")]
+        public GameObject editableTree;
+        public GameObject displayTrees;
+
+        private GameObject growStyleButtons, barkButtons;
+        private GameObject buildButton;
 		private int currentMenu = 0;
 		private TrackableBehaviour mTrackableBehaviour;
 		private bool trackableSeen = false;
+        private TreeDatabaseHandler treeDatabase;
+        private int currentDisplayed;
 
 		// Use this for initialization
 		void Start () {
@@ -25,6 +33,8 @@ namespace Vuforia
 			{
 				mTrackableBehaviour.RegisterTrackableEventHandler(this);
 			}
+            treeDatabase = GetComponent<TreeDatabaseHandler>();
+            editableTree.SetActive(false);
 		}
 		
 		// Update is called once per frame
@@ -79,16 +89,23 @@ namespace Vuforia
 
 		private void checkTouchHit(RaycastHit hit) {
 			if(hit.transform.gameObject.tag == "Button") {
-				if(currentMenu == 1) // Choosing bark
+                if(currentMenu == 1) // Start to build has been pressed
+                {
+                    if (hit.transform.gameObject.name == "NextTreeButton")
+                        ShowNextTree();
+                    else
+                        GoNext();
+                }
+                else if (currentMenu == 2) // Choosing bark
 				{
 					hit.transform.GetComponent<ButtonScript>().SetTreeTexture();
 					GoNext();
                 }
-                else if (currentMenu == 2) //
+                else if (currentMenu == 3) //
                 {
                     GoNext();
                 }
-                else if(currentMenu == 3) //
+				else if(currentMenu == 4) //
 				{
 					hit.transform.GetComponent<ButtonScript>().SetGrowStyle();
 					GoNext();
@@ -97,31 +114,42 @@ namespace Vuforia
 		}
 
 		public void GoNext() {
-			if (currentMenu == 0) // go from viewing world to chosing bark
+            Debug.Log("Current menu index: " + currentMenu);
+            if (currentMenu == 0) // go from world to build button
+            {
+                showBuildButton();
+                currentMenu++;
+            }
+			else if (currentMenu == 1) // go from coosing build to chosing bark
 			{
+                editableTree.SetActive(true);
+                HideDispTrees();
+                RemoveBuildButton();
 				ShowBarkButtons();
 				currentMenu++;
 			}
-			else if (currentMenu == 1) // go from chosing bark to shaping leaves
+			else if (currentMenu == 2) // go from chosing bark to shaping leaves
 			{
 				RemoveBarkButtons();
 				startLeafShaping();
 				currentMenu++;
 			//	GoNext(); // TOOD: REMOVE THIS and insert leaf shaping
 			} 
-			else if (currentMenu == 2) // go from shaping leaves to chosing grow style
+			else if (currentMenu == 3) // go from shaping leaves to chosing grow style
 			{
 				endLeafShaping();
 				ShowGrowStyleButtons();
 				currentMenu++;
 			}
-			else if (currentMenu == 3) // go from chosing grow style
+			else if (currentMenu == 4) // go from chosing grow style
 			{
 				RemoveGrowStyleButtons();
-				currentMenu++;
+                treeDatabase.SaveTree(); // Save the newly created tree to the database
+                currentMenu++;
 			}
-			else if (currentMenu == 4) // go from planting tree back to viewing world
+			else if (currentMenu == 5) // go from planting tree back to viewing world
 			{
+                treeDatabase.SaveTree(); 
 				currentMenu = 0;
 			}
 		}
@@ -136,13 +164,25 @@ namespace Vuforia
 			barkButtons.transform.parent = transform;
 		}
 
-		private void RemoveGrowStyleButtons() {
+        private void showBuildButton()
+        {
+            Debug.Log("Show the build button");
+            buildButton = Instantiate(buildButtonPrefab);
+            buildButton.transform.parent = transform;
+        }
+
+        private void RemoveGrowStyleButtons() {
 			Destroy(growStyleButtons);
 		}
 
 		private void RemoveBarkButtons() {
 			Destroy(barkButtons);
 		}
+
+        private void RemoveBuildButton()
+        {
+            Destroy(buildButton);
+        }
 
         private void startLeafShaping() {
             leafDrawerPrefab.SetActive(true);
@@ -156,6 +196,27 @@ namespace Vuforia
             Destroy(GameObject.Find("NextButton(Clone)"));
             foreach (GameObject obj in onDrawingDisable) {
                 obj.SetActive(true);
+            }
+        }
+
+        /// <summary>
+        /// Cycles through display-trees
+        /// </summary>
+        public void ShowNextTree()
+        {
+            // Hide currently displayed
+            displayTrees.transform.GetChild(currentDisplayed).gameObject.SetActive(false);
+            // Get next index
+            currentDisplayed = (currentDisplayed + 1) % displayTrees.transform.childCount;
+            // Show next tree
+            displayTrees.transform.GetChild(currentDisplayed).gameObject.SetActive(true);
+        }
+
+        public void HideDispTrees()
+        {
+            foreach(Transform tree in displayTrees.transform)
+            {
+                tree.gameObject.SetActive(false);
             }
         }
     }

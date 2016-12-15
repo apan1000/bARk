@@ -158,9 +158,9 @@ namespace Wasabimole.ProceduralTree
 			float width = 5;
 			float height = 5;
 
-			// ---------------------------------------------------------------------------------------------------------------------------
-			// Leaf Generation
-			// ---------------------------------------------------------------------------------------------------------------------------
+            // ---------------------------------------------------------------------------------------------------------------------------
+            // Leaf Generation
+            // ---------------------------------------------------------------------------------------------------------------------------
 
 			for (int i = 0; i < leafAmount; i++) {
 				GameObject leaf = new GameObject ("leaf_" + i);
@@ -171,7 +171,7 @@ namespace Wasabimole.ProceduralTree
 					MeshRenderer mr = leaf.gameObject.AddComponent<MeshRenderer> ();
 					mr.material = leafMaterial;
 
-					Mesh mesh = new Mesh ();
+                    Mesh mesh = new Mesh ();
 					mf.mesh = mesh;
 
 					Vector3[] vertices = new Vector3[4];

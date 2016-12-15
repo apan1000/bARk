@@ -5,21 +5,24 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Unity.Editor;
 using System.Threading.Tasks;
+using System;
 
-public class DatabaseHandler2 : MonoBehaviour
+public class DatabaseHandler : MonoBehaviour
 {
+    public delegate void DatabaseEvenet(List<ARTree> allTrees);
+    public static event DatabaseEvenet TreesLoaded; 
     public Texture2D leafTex;
 
+    DatabaseReference rootRef;
     DatabaseReference treeRef;
-    List<ARTree> myTrees;
+    List<ARTree> allTrees;
 
-	void Start () {
+    bool treesLoaded = false;
+
+	void Awake()
+    {
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://bark-11fd5.firebaseio.com/");
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
-
-        myTrees = new List<ARTree>();
-        treeRef = reference.Child("Tree");
-        treeRef.GetValueAsync().ContinueWith(ReadAllTrees);
+        rootRef = FirebaseDatabase.DefaultInstance.RootReference;
 	}
 
     /// <summary>
@@ -32,8 +35,6 @@ public class DatabaseHandler2 : MonoBehaviour
         ARTree myTree = new ARTree(seed, maxNumVertices, numberOfSides, baseRadius, radiusStep, minimumRadius,
         branchRoundness, segmentLength, twisting, branchProbability, growthPercent);
 
-        //ARTreeTest myTree = new ARTreeTest(13.5f);
-
         myTree.ConvertToString(leafTex);
         Dictionary<string, object> entryVal = myTree.ToDictionary();
 
@@ -42,8 +43,24 @@ public class DatabaseHandler2 : MonoBehaviour
         treeRef.Parent.UpdateChildrenAsync(childUpdate);
     }
 
-    private void ReadAllTrees(Task<DataSnapshot> task)
+    /// <summary>
+    /// Returns all trees found in database
+    /// </summary>
+    public List<ARTree> GetAllTrees()
     {
+        allTrees = new List<ARTree>();
+        treeRef = rootRef.Child("Trees");
+        treeRef.GetValueAsync().ContinueWith(GetTrees);
+        return allTrees;
+    }
+
+    /// <summary>
+    /// Fetches all trees in databse an stores them in the databaseHandler object
+    /// </summary>
+    /// <param name="task"></param>
+    private void GetTrees(Task<DataSnapshot> task)
+    {
+        allTrees = new List<ARTree>();
         if (task.IsFaulted)
             Debug.Log("Failed to Load");
         else if (task.IsCompleted)
@@ -51,8 +68,21 @@ public class DatabaseHandler2 : MonoBehaviour
             DataSnapshot snapshot = task.Result;
             foreach(var tree in snapshot.Children)
             {
-
+                ARTree newTree = new ARTree(tree);
+                allTrees.Add(newTree);
             }
+            treesLoaded = true;
+        }
+    }
+
+    // Event cal has to be called on main thread, to avoid 
+    // issues in functions responding to this event.
+    void Update()
+    {
+        if (treesLoaded)
+        {
+            TreesLoaded(allTrees);
+            treesLoaded = false;
         }
     }
 }

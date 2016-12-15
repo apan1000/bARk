@@ -1,22 +1,24 @@
-﻿using System.Collections;
+﻿using Firebase.Database;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ARTree
 {
-    int seed;
-    int maxNumVertices;
-    int numberOfSides;
-    float baseRadius;
-    float radiusStep;
-    float minimumRadius;
-    float branchRoundness;
-    float segmentLength;
-    float twisting;
-    float branchProbability;
-    float growthPercent;
-    private string leafEncoded;
-    private Texture2D leafText;
+    public int seed { get; set; }
+    public int maxNumVertices { get; set; }
+    public int numberOfSides { get; set; }
+    public float baseRadius { get; set; }
+    public float radiusStep { get; set; }
+    public float minimumRadius { get; set; }
+    public float branchRoundness { get; set; }
+    public float segmentLength { get; set; }
+    public float twisting { get; set; }
+    public float branchProbability { get; set; }
+    public float growthPercent { get; set; }
+    public string leafEncoded { get; set; }
+    public Texture2D leafTexture { get; set; }
 
     public ARTree(int seed, int maxNumVertices, int numberOfSides, float baseRadius, float radiusStep, float minimumRadius, 
         float branchRoundness, float segmentLength, float twisting, float branchProbability, float growthPercent)
@@ -32,6 +34,26 @@ public class ARTree
         this.twisting = twisting;
         this.branchProbability = branchRoundness;
         this.growthPercent = growthPercent;
+    }
+
+    /// <summary>
+    /// Creates a tree from data snapshot
+    /// </summary>
+    /// <param name="dbN"></param>
+    public ARTree(DataSnapshot dbN)
+    {
+        this.seed = int.Parse(dbN.Child("seed").Value.ToString());
+        this.maxNumVertices = int.Parse(dbN.Child("maxNumVertices").Value.ToString());
+        this.numberOfSides = int.Parse(dbN.Child("numberOfSides").Value.ToString());
+        this.baseRadius = float.Parse(dbN.Child("baseRadius").Value.ToString());
+        this.radiusStep = float.Parse(dbN.Child("radiusStep").Value.ToString());
+        this.minimumRadius = float.Parse(dbN.Child("minimumRadius").Value.ToString());
+        this.branchRoundness = float.Parse(dbN.Child("branchRoundness").Value.ToString());
+        this.segmentLength = float.Parse(dbN.Child("segmentLength").Value.ToString());
+        this.twisting = float.Parse(dbN.Child("twisting").Value.ToString());
+        this.branchProbability = float.Parse(dbN.Child("branchProbability").Value.ToString());
+        this.growthPercent = float.Parse(dbN.Child("growthPercent").Value.ToString());
+        this.leafEncoded = dbN.Child("leaf").Value.ToString();
     }
 
     public Dictionary<string, object> ToDictionary()
@@ -52,15 +74,45 @@ public class ARTree
         return result;
     }
 
-    public void ConvertToTexture(string s)
+    /// <summary>
+    /// Creates a Texture2D from a PNG string.
+    /// Has to be done on main thread.
+    /// </summary>
+    /// <param name="s"></param>
+    public void ConvertToTexture()
     {
-        byte[] bytes = System.Convert.FromBase64String(s);
-        leafText = new Texture2D(2, 2);
-        leafText.LoadImage(bytes);
+        byte[] bytes = System.Convert.FromBase64String(leafEncoded);
+        leafTexture = new Texture2D(2, 2); // Load image overrides the size
+        leafTexture.LoadImage(bytes);
     }
     
+    /// <summary>
+    /// Converts a Texture2D to a PNG string
+    /// </summary>
+    /// <param name="leaf"></param>
     public void ConvertToString(Texture2D leaf)
     {
        leafEncoded = System.Convert.ToBase64String(leaf.EncodeToPNG());
+    }
+
+    /// <summary>
+    /// Retrurns a string with information about the tree.
+    /// </summary>
+    /// <returns></returns>
+    public override string ToString()
+    {
+        return
+           "seed: " + seed.ToString() + "\n" +
+           "maxNumVertices: " + maxNumVertices.ToString() + "\n" +
+           "numberOfSides: " + numberOfSides.ToString() + "\n" +
+           "baseRadius: " + baseRadius.ToString() + "\n" +
+           "radiusStep: " + radiusStep.ToString() + "\n" +
+           "minimumRadius: " + minimumRadius.ToString() + "\n" +
+           "branchRoundness: " + branchRoundness.ToString() + "\n" +
+           "segmentLength: " + segmentLength.ToString() + "\n" +
+           "twisting: " + twisting.ToString() + "\n" +
+           "branchProbability: " + branchProbability.ToString() + "\n" +
+           "growthPercent: " + growthPercent.ToString() + "\n" +
+           "leafEncoded: " + leafEncoded.ToString();
     }
 }

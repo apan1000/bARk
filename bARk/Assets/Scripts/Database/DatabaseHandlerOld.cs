@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 // Firebase can only be accessed when running the application on a phone
 // Error will occur if you try to access it in play mode
-public class DatabaseHandler : MonoBehaviour
+public class DatabaseHandlerOld : MonoBehaviour
 {
     //public Text info;
     //public Button[] buttons;
