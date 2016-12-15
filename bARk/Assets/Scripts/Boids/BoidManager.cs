@@ -8,6 +8,10 @@ using UnityEngine;
 
 public class BoidManager : MonoBehaviour {
 
+    [Header("Boid Creature")]
+    public GameObject boidCreature;
+
+    [Header("Boid Attributes")]
     public int boidCreatureCount = 20;
     public float minSpeed = 1.0f;
     public float maxSpeed = 5.0f;
@@ -18,37 +22,41 @@ public class BoidManager : MonoBehaviour {
     public float patrolDistance = 20.0f;
     public float minHeight = 10;
     public float maxHeight = 30;
+    public Vector3 boidStartSize;
 
     private float lastTime = 0;
     private int lastNeighbourUpdate = 0;
-    public float neighbourUpdateTime = 2.0f;
 
-    public Vector3 tendingPlace;
+    [Header("Time Variables")]
+    public float neighbourUpdateTime = 2.0f;
     public float seekPointChangeInterval = 5.0f;
+
+    [Header("Misc")]
+    public Vector3 tendingPlace;
     private float seekCounter;
     public Vector3 avoidancePoint;
 
     public Transform avoidanceObject;
 
-    public GameObject[] boids;
+    private GameObject[] boids;
+    private GameObject centerObject;
 
-    public Vector3 boidSize;
-    public GameObject boidCreature;
-
+    
     private Vector3 boidCenter;
     private Vector3 boidSpeed;
 
 	// Use this for initialization
 	void Start () {
         avoidanceObject = GameObject.FindGameObjectWithTag("Tree").transform;
+        centerObject = transform.GetChild(0).gameObject;
         seekCounter = seekPointChangeInterval;
         boids = new GameObject[boidCreatureCount];
         for (int i = 0; i < boidCreatureCount; i++) {
             boids[i] = Instantiate(boidCreature);
             boids[i].transform.parent = transform;
-            float xPos = Random.Range(-boidSize.x, boidSize.x);
-            float yPos = Random.Range(-boidSize.y, boidSize.y);
-            float zPos = Random.Range(-boidSize.z, boidSize.z);
+            float xPos = Random.Range(-boidStartSize.x, boidStartSize.x);
+            float yPos = Random.Range(-boidStartSize.y, boidStartSize.y);
+            float zPos = Random.Range(-boidStartSize.z, boidStartSize.z);
             boids[i].transform.localPosition = new Vector3(xPos, yPos, zPos);
             boids[i].GetComponent<BoidController>().setBoidManager(gameObject);
             boids[i].transform.eulerAngles = new Vector3(0, Random.Range(0, 360), 0);
@@ -66,6 +74,7 @@ public class BoidManager : MonoBehaviour {
         }
         boidCenter = center / boidCreatureCount;
         boidSpeed = totalVelocity / boidCreatureCount;
+        centerObject.transform.localPosition = boidCenter;
         updateBoidNeighbours();
         updateSeekPoint();
 	}

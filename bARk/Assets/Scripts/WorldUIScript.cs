@@ -161,7 +161,7 @@ public class WorldUIScript : MonoBehaviour, ITrackableEventHandler {
 		else if (currentMenu == 4) // go from chosing grow style
 		{
 			RemoveGrowStyleButtons();
-            activeBoid = Instantiate(boid, new Vector3(0, 5, 0), Quaternion.identity);
+            activeBoid = Instantiate(boid, new Vector3(10, 5, 0), Quaternion.identity);
             treeDatabase.SaveTree(); // Save the newly created tree to the database
             ShowBackToMainButton();
             currentMenu++;
