@@ -31,7 +31,7 @@ public class LeafGenerator {
     private Vector2[] toVector2(Vector3[] points) {
         Vector2[] newVec = new Vector2[points.Length];
         for (int i = 0; i < points.Length; ++i) {
-            newVec[i] = new Vector2(points[i].x, points[i].y);
+            newVec[i] = new Vector2(points[i].x, points[i].z);
         }
         return newVec;
     }

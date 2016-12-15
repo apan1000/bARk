@@ -9,6 +9,9 @@ namespace Vuforia
 		[Header("Button prefabs")]
 		public GameObject growStyleButtonsPrefab;
 		public GameObject barkButtonsPrefab;
+        public GameObject leafDrawerPrefab;
+
+        public GameObject[] onDrawingDisable;
 
 		private GameObject growStyleButtons, barkButtons;
 		private int currentMenu = 0;
@@ -80,8 +83,12 @@ namespace Vuforia
 				{
 					hit.transform.GetComponent<ButtonScript>().SetTreeTexture();
 					GoNext();
-				}
-				else if(currentMenu == 3) //
+                }
+                else if (currentMenu == 2) //
+                {
+                    GoNext();
+                }
+                else if(currentMenu == 3) //
 				{
 					hit.transform.GetComponent<ButtonScript>().SetGrowStyle();
 					GoNext();
@@ -98,13 +105,13 @@ namespace Vuforia
 			else if (currentMenu == 1) // go from chosing bark to shaping leaves
 			{
 				RemoveBarkButtons();
-				// startLeafShaping();
+				startLeafShaping();
 				currentMenu++;
-				GoNext(); // TOOD: REMOVE THIS and insert leaf shaping
+			//	GoNext(); // TOOD: REMOVE THIS and insert leaf shaping
 			} 
 			else if (currentMenu == 2) // go from shaping leaves to chosing grow style
 			{
-				// endLeafShaping();
+				endLeafShaping();
 				ShowGrowStyleButtons();
 				currentMenu++;
 			}
@@ -136,5 +143,20 @@ namespace Vuforia
 		private void RemoveBarkButtons() {
 			Destroy(barkButtons);
 		}
-	}
+
+        private void startLeafShaping() {
+            leafDrawerPrefab.SetActive(true);
+            foreach (GameObject obj in onDrawingDisable) {
+                obj.SetActive(false);
+            }
+        }
+
+        private void endLeafShaping() {
+            Destroy(leafDrawerPrefab);
+            Destroy(GameObject.Find("NextButton(Clone)"));
+            foreach (GameObject obj in onDrawingDisable) {
+                obj.SetActive(true);
+            }
+        }
+    }
 }
