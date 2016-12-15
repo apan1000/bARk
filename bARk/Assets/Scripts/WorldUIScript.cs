@@ -11,13 +11,16 @@ namespace Vuforia
 		public GameObject barkButtonsPrefab;
         public GameObject leafDrawerPrefab;
         public GameObject backToMainPrefab;
+        public GameObject buildButtonPrefab;
 
         public GameObject[] onDrawingDisable;
-
-        public GameObject buildButtonPrefab;
+        
         [Header("Tree")]
         public GameObject editableTree;
         public GameObject displayTrees;
+
+        [Header("Environment")]
+        public GameObject platts;
 
         private GameObject growStyleButtons, barkButtons;
         private GameObject buildButton, backToMainButton;
@@ -137,6 +140,7 @@ namespace Vuforia
 			else if (currentMenu == 2) // go from chosing bark to shaping leaves
 			{
 				RemoveBarkButtons();
+                platts.SetActive(false);
 				startLeafShaping(); // New leaf is not applied to the tree.
 				currentMenu++;
 			//	GoNext(); // TOOD: REMOVE THIS and insert leaf shaping
@@ -145,6 +149,7 @@ namespace Vuforia
 			{
 				endLeafShaping();
 				ShowGrowStyleButtons();
+                platts.SetActive(true);
 				currentMenu++;
 			}
 			else if (currentMenu == 4) // go from chosing grow style
