@@ -149,7 +149,6 @@ namespace Vuforia
 			}
 			else if (currentMenu == 5) // go from planting tree back to viewing world
 			{
-                treeDatabase.SaveTree(); 
 				currentMenu = 0;
 			}
 		}

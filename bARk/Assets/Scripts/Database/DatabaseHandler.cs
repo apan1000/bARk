@@ -9,8 +9,10 @@ using System;
 
 public class DatabaseHandler : MonoBehaviour
 {
-    public delegate void DatabaseEvenet(List<ARTree> allTrees);
-    public static event DatabaseEvenet TreesLoaded; 
+    public delegate void DatabaseEvent(List<ARTree> allTrees);
+    public static event DatabaseEvent TreesLoaded;
+    public static event DatabaseEvent NewTreeAdded;
+
     public Texture2D leafTex;
 
     DatabaseReference rootRef;
@@ -23,7 +25,19 @@ public class DatabaseHandler : MonoBehaviour
     {
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://bark-11fd5.firebaseio.com/");
         rootRef = FirebaseDatabase.DefaultInstance.RootReference;
-	}
+        treeRef = rootRef.Child("Trees");
+    }
+
+    void Start()
+    {
+        treeRef.LimitToFirst(1).ChildAdded += NewTree;
+    }
+
+    private void NewTree(object sender, ChildChangedEventArgs args)
+    {
+
+        NewTreeAdded(null);
+    }
 
     /// <summary>
     /// Adds a tree to firebase database
@@ -49,7 +63,6 @@ public class DatabaseHandler : MonoBehaviour
     public List<ARTree> GetAllTrees()
     {
         allTrees = new List<ARTree>();
-        treeRef = rootRef.Child("Trees");
         treeRef.GetValueAsync().ContinueWith(GetTrees);
         return allTrees;
     }

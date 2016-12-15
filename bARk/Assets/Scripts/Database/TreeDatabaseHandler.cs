@@ -60,6 +60,11 @@ public class TreeDatabaseHandler : MonoBehaviour {
             g.transform.parent = displayTrees.transform;
             g.transform.localScale = new Vector3(.2f, .2f, .2f);
             g.SetActive(showFirst);
+
+            // Change texture on leafs
+            GameObject leaf = g.transform.GetChild(0).gameObject;
+            leaf.GetComponent<ChangeLeafTexture>().ChangeTexture();
+
             showFirst = false;  
         }
     }

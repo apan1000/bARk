@@ -150,12 +150,13 @@ namespace Wasabimole.ProceduralTree
 			if (transform.FindChild (holderName)) {
 				leaves.Clear ();
 				DestroyImmediate (transform.FindChild (holderName).gameObject);
-			}
-			Transform leafHolder = new GameObject (holderName).transform;
-			leafHolder.parent = transform;
+            }
+            Transform leafHolder = new GameObject(holderName).transform;
+            leafHolder.parent = transform;
             leafHolder.localScale = Vector3.one;
+            leafHolder.gameObject.AddComponent<ChangeLeafTexture>(); // Component for changin leaf texture
 
-			float width = 5;
+            float width = 5;
 			float height = 5;
 
             // ---------------------------------------------------------------------------------------------------------------------------
@@ -217,8 +218,8 @@ namespace Wasabimole.ProceduralTree
 					leaf.GetComponent<MeshRenderer> ().material = leafMaterial;
 				}
 
-				leaf.transform.parent = leafHolder;
-				leaves.Add (leaf);
+                leaf.transform.parent = leafHolder;
+                leaves.Add (leaf);
 				leaf.SetActive (false);
 			}
 
