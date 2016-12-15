@@ -14,6 +14,7 @@ public class TreeDatabaseHandler : MonoBehaviour
     [Header("Tree")]
     public GameObject displayTrees;
     public GameObject rootTree;
+    public Texture2D[] barkTextures;
 
     private ProceduralTree tree;
     private Renderer treeMaterial;
@@ -147,6 +148,21 @@ public class TreeDatabaseHandler : MonoBehaviour
 
         g.AddComponent<TimeStampHolder>().TimeStamp = tree.timeStamp;
 
+        // Set the propper tree texture
+        Renderer treeR = g.GetComponent<Renderer>();
+        string textureName = tree.materialName; // tree.materialName is textureName;
+        if (textureName == "bark3") // Oak
+        {
+
+        }
+        else if (textureName == "bark1") // Rainbow
+        {
+
+        }
+        else // Birch
+        {
+
+        }
         return g;
     }
 
