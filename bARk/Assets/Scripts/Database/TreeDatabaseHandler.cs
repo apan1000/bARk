@@ -153,15 +153,23 @@ public class TreeDatabaseHandler : MonoBehaviour
         string textureName = tree.materialName; // tree.materialName is textureName;
         if (textureName == "bark3") // Oak
         {
-
+            Debug.Log("BARK3");
+            treeR.material.mainTexture = barkTextures[0];
         }
         else if (textureName == "bark1") // Rainbow
         {
-
+            Debug.Log("BARK1");
+            treeR.material.mainTexture = barkTextures[1];
         }
         else // Birch
         {
-
+            Debug.Log("BIRCH!!!");
+            g.AddComponent<ProceduralBark>();
+            ProceduralBark b = g.GetComponent<ProceduralBark>();
+            b.freq = 0.08f;
+            b.lacunarity = 3.38f;
+            b.gain = -0.78f;
+            b.GenerateTexture();
         }
         return g;
     }
