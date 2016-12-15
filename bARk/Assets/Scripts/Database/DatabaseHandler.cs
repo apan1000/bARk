@@ -9,10 +9,9 @@ using System;
 
 public class DatabaseHandler : MonoBehaviour
 {
-    public delegate void DatabaseEvent(List<ARTree> allTrees);
-    public static event DatabaseEvent TreesLoaded;
-    public delegate void DatabaseEvent2(ARTree tree);
-    public static event DatabaseEvent2 NewTreeAdded;
+    public delegate void DatabaseEvent(ARTree tree);
+    public static event DatabaseEvent NewTreeAdded;
+    public static event DatabaseEvent NewTreeToRemove;
 
     public Texture2D leafTex;
 
@@ -32,26 +31,31 @@ public class DatabaseHandler : MonoBehaviour
         // Listen for events 
         treeEvent = FirebaseDatabase.DefaultInstance.GetReference("Trees");
         treeEvent.ChildAdded += NewTree; // This will trigger at startup on childs already existing in database 
-        treeEvent.ChildRemoved += TreeRemoved;
+        treeEvent.ChildRemoved += TreeRemove;
     }
 
     private void NewTree(object sender, ChildChangedEventArgs args)
     {
-        Debug.Log("New tree found!!");
         if (args.DatabaseError != null)
         {
             Debug.LogError(args.DatabaseError.Message);
             return;
         }
         DataSnapshot snap = args.Snapshot;
-        ARTree newTree = new ARTree(snap);
-        NewTreeAdded(newTree);
+        ARTree tree = new ARTree(snap);
+        NewTreeAdded(tree);
     }
 
-    private void TreeRemoved(object sender, ChildChangedEventArgs args)
+    private void TreeRemove(object sender, ChildChangedEventArgs args)
     {
-        Debug.Log("--Tree Removed!");
-
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+        DataSnapshot snap = args.Snapshot;
+        ARTree tree = new ARTree(snap);
+        NewTreeToRemove(tree);
     }
 
     /// <summary>
@@ -74,7 +78,7 @@ public class DatabaseHandler : MonoBehaviour
 
     void OnDestroy()
     {
-        treeRef.StartAt(allTrees.Count).ChildAdded -= NewTree;
-        treeRef.ChildRemoved -= TreeRemoved;
+        treeEvent.ChildAdded -= NewTree;
+        treeEvent.ChildRemoved -= TreeRemove;
     }
 }

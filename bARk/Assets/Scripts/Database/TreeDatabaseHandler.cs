@@ -13,7 +13,8 @@ public class TreeDatabaseHandler : MonoBehaviour
     public GameObject rootTree;
 
     private ProceduralTree tree;
-    private List<ARTree> newTreesToAdd;
+    private List<ARTree> treesToAdd;
+    private List<ARTree> treesToRemove;
     private bool firstTree = true;
 
     // Use this for initialization
@@ -24,8 +25,10 @@ public class TreeDatabaseHandler : MonoBehaviour
             if (child.tag == "Tree")
                 tree = child.GetComponent<ProceduralTree>();
         }
-        newTreesToAdd = new List<ARTree>();
+        treesToAdd = new List<ARTree>();
+        treesToRemove = new List<ARTree>();
         DatabaseHandler.NewTreeAdded += AddTreeToAdd;
+        DatabaseHandler.NewTreeToRemove += AddTreeToRemove;
     }
 
     /// <summary>
@@ -44,7 +47,12 @@ public class TreeDatabaseHandler : MonoBehaviour
     /// </summary>
     private void AddTreeToAdd(ARTree newTree)
     {
-        newTreesToAdd.Add(newTree);
+        treesToAdd.Add(newTree);
+    }
+
+    private void AddTreeToRemove(ARTree removeTree)
+    {
+        treesToRemove.Add(removeTree);
     }
 
     /// <summary>
@@ -52,10 +60,10 @@ public class TreeDatabaseHandler : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if(newTreesToAdd.Count > 0)
+        if(treesToAdd.Count > 0)
         {
-            ARTree newTree = newTreesToAdd[0]; // Two step Pop
-            newTreesToAdd.RemoveAt(0);
+            ARTree newTree = treesToAdd[0]; // Two step Pop
+            treesToAdd.RemoveAt(0);
 
             bool addTree = true;
             foreach (Transform child in displayTrees.transform)
@@ -75,6 +83,23 @@ public class TreeDatabaseHandler : MonoBehaviour
                 Debug.Log("Tree added!");
                 GameObject g = CreateTreeGameobject(newTree);
                 AddTreeToScene(g);
+            }
+        }
+
+        if(treesToRemove.Count > 0)
+        {
+            ARTree removeTree = treesToRemove[0];
+            treesToRemove.RemoveAt(0);
+
+            foreach (Transform child in displayTrees.transform)
+            {
+                string timeStampEx = child.gameObject.GetComponent<TimeStampHolder>().TimeStamp;
+                if(removeTree.timeStamp == timeStampEx)
+                {
+                    Debug.Log("Child Removed");
+                    Destroy(child.gameObject);
+                    break;
+                }
             }
         }
     }
