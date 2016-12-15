@@ -14,7 +14,7 @@ public class TreeDatabaseHandler : MonoBehaviour
 
     private ProceduralTree tree;
     private List<ARTree> newTreesToAdd;
-
+    private bool firstTree = true;
 
     // Use this for initialization
     void Start ()
@@ -25,8 +25,6 @@ public class TreeDatabaseHandler : MonoBehaviour
                 tree = child.GetComponent<ProceduralTree>();
         }
         newTreesToAdd = new List<ARTree>();
-        database.GetAllTrees(); // STarts a thread in database that looks for trees
-        DatabaseHandler.TreesLoaded += LoadedTrees; // Listen for when trees are found
         DatabaseHandler.NewTreeAdded += AddTreeToAdd;
     }
 
@@ -64,6 +62,7 @@ public class TreeDatabaseHandler : MonoBehaviour
             {
                 string timeStampEx = child.gameObject.GetComponent<TimeStampHolder>().TimeStamp;
 
+                // Do not add tree to scene if it already exists
                 if (newTree.timeStamp == timeStampEx)
                 {
                     Debug.Log("Tree excluded");
@@ -75,25 +74,8 @@ public class TreeDatabaseHandler : MonoBehaviour
             {
                 Debug.Log("Tree added!");
                 GameObject g = CreateTreeGameobject(newTree);
-                AddTreeToScene(g, false);
+                AddTreeToScene(g);
             }
-        }
-    }
-
-    /// <summary>
-    /// When all trees has been found on the database, this gets called
-    /// </summary>
-    /// <param name="allTrees"></param>
-    private void LoadedTrees(List<ARTree> allTrees)
-    {
-        bool showFirst = true;
-        // Go through all trees and create dissabled gameobjects from them
-        // store them as childs under displayTrees
-        foreach (ARTree tree in allTrees)
-        {
-            GameObject g = CreateTreeGameobject(tree);
-            AddTreeToScene(g, showFirst);
-            showFirst = false;  
         }
     }
 
@@ -138,15 +120,11 @@ public class TreeDatabaseHandler : MonoBehaviour
     /// </summary>
     /// <param name="tree"></param>
     /// <param name="enabled"></param>
-    private void AddTreeToScene(GameObject g, bool enabled)
+    private void AddTreeToScene(GameObject g)
     {
         g.transform.parent = displayTrees.transform;
         g.transform.localScale = new Vector3(.2f, .2f, .2f);
-        g.SetActive(enabled);
-    }
-
-    private void OnDestroy()
-    {
-        DatabaseHandler.TreesLoaded -= LoadedTrees;
+        g.SetActive(firstTree);
+        firstTree = false;
     }
 }

@@ -31,12 +31,8 @@ public class DatabaseHandler : MonoBehaviour
 
         // Listen for events 
         treeEvent = FirebaseDatabase.DefaultInstance.GetReference("Trees");
-
-    }
-
-    void Start()
-    {
-        //treeRef.LimitToFirst(1).ChildAdded += NewTree;
+        treeEvent.ChildAdded += NewTree; // This will trigger at startup on childs already existing in database 
+        treeEvent.ChildRemoved += TreeRemoved;
     }
 
     private void NewTree(object sender, ChildChangedEventArgs args)
@@ -47,11 +43,9 @@ public class DatabaseHandler : MonoBehaviour
             Debug.LogError(args.DatabaseError.Message);
             return;
         }
-        // ONLY ONE AT A TIME
         DataSnapshot snap = args.Snapshot;
         ARTree newTree = new ARTree(snap);
         NewTreeAdded(newTree);
-
     }
 
     private void TreeRemoved(object sender, ChildChangedEventArgs args)
@@ -76,52 +70,6 @@ public class DatabaseHandler : MonoBehaviour
         Dictionary<string, object> childUpdate = new Dictionary<string, object>();
         childUpdate["/Trees/" + key] = entryVal;
         treeRef.Parent.UpdateChildrenAsync(childUpdate);
-    }
-
-    /// <summary>
-    /// Returns all trees found in database
-    /// </summary>
-    public List<ARTree> GetAllTrees()
-    {
-        allTrees = new List<ARTree>();
-        treeEvent.GetValueAsync().ContinueWith(GetTrees);
-        return allTrees;
-    }
-
-    /// <summary>
-    /// Fetches all trees in databse an stores them in the databaseHandler object
-    /// </summary>
-    /// <param name="task"></param>
-    private void GetTrees(Task<DataSnapshot> task)
-    {
-        allTrees = new List<ARTree>();
-        if (task.IsFaulted)
-            Debug.Log("Failed to Load");
-        else if (task.IsCompleted)
-        {
-            DataSnapshot snapshot = task.Result;
-            foreach(var tree in snapshot.Children)
-            {
-                ARTree newTree = new ARTree(tree);
-                allTrees.Add(newTree);
-            }
-            treesLoaded = true;
-        }
-    }
-
-    // Event cal has to be called on main thread, to avoid 
-    // issues in functions responding to this event.
-    void Update()
-    {
-        if (treesLoaded)
-        {
-            TreesLoaded(allTrees);
-            treesLoaded = false;
-
-            // Start listenting after changes when trees has been loaded
-            treeEvent.ChildAdded += NewTree;
-            treeEvent.ChildRemoved += TreeRemoved;
-        }
     }
 
     void OnDestroy()
