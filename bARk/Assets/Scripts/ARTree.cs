@@ -20,9 +20,11 @@ public class ARTree
     public string leafEncoded { get; set; }
     public Texture2D leafTexture { get; set; }
     public string timeStamp { get; set; }
+    public string materialName { get; set; }
 
     public ARTree(int seed, int maxNumVertices, int numberOfSides, float baseRadius, float radiusStep, float minimumRadius, 
-        float branchRoundness, float segmentLength, float twisting, float branchProbability, float growthPercent, string timeStamp)
+        float branchRoundness, float segmentLength, float twisting, float branchProbability, float growthPercent, string timeStamp,
+        string materialName)
     {
         this.seed = seed;
         this.maxNumVertices = maxNumVertices;
@@ -36,10 +38,12 @@ public class ARTree
         this.branchProbability = branchRoundness;
         this.growthPercent = growthPercent;
         this.timeStamp = timeStamp;
+        this.materialName = materialName;
     }
 
     /// <summary>
     /// Creates a tree from data snapshot
+    /// dbN = database Node
     /// </summary>
     /// <param name="dbN"></param>
     public ARTree(DataSnapshot dbN)
@@ -57,6 +61,7 @@ public class ARTree
         this.growthPercent = float.Parse(dbN.Child("growthPercent").Value.ToString());
         this.leafEncoded = dbN.Child("leaf").Value.ToString();
         this.timeStamp = dbN.Child("timeStamp").Value.ToString();
+        this.materialName = dbN.Child("materialName").Value.ToString();
     }
 
     public Dictionary<string, object> ToDictionary()
@@ -75,6 +80,7 @@ public class ARTree
         result["growthPercent"] = growthPercent.ToString();
         result["leaf"] = leafEncoded;
         result["timeStamp"] = timeStamp;
+        result["materialName"] = materialName;
         return result;
     }
 
