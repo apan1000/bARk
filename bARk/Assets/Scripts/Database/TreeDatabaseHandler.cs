@@ -6,6 +6,9 @@ using Wasabimole.ProceduralTree;
 
 public class TreeDatabaseHandler : MonoBehaviour
 {
+    public delegate void TreeDestroyedInScene();
+    public static event TreeDestroyedInScene TreeDestroyed;
+
     [Header("Database")]
     public DatabaseHandler database;
     [Header("Tree")]
@@ -98,6 +101,7 @@ public class TreeDatabaseHandler : MonoBehaviour
                 {
                     Debug.Log("Child Removed");
                     Destroy(child.gameObject);
+                    TreeDestroyed();
                     break;
                 }
             }
