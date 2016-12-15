@@ -132,7 +132,7 @@ public class LeafDrawer : MonoBehaviour {
         texture.SetPixels32(pixels);
         texture.Apply();
         byte[] bytes = texture.EncodeToPNG();
-        File.WriteAllBytes(Application.dataPath + "/Leaf.png", bytes);
+        File.WriteAllBytes(Application.persistentDataPath + "/Leaf.png", bytes);
     }
 
     private Color32[] rotateMatrix(Color32[] tex, int wid, int hi) {
