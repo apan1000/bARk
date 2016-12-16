@@ -23,8 +23,10 @@ public class WorldUIScript : MonoBehaviour, ITrackableEventHandler {
     [Header("Environment")]
     public GameObject platts;
     public GameObject boid;
-    private GameObject activeBoid;
+    public AudioClip clickSound;
 
+
+    private GameObject activeBoid;
     private GameObject growStyleButtons, barkButtons;
     private GameObject buildButton, backToMainButton;
 	private GameObject leafDrawer;
@@ -33,6 +35,7 @@ public class WorldUIScript : MonoBehaviour, ITrackableEventHandler {
 	private bool trackableSeen = false;
     private TreeDatabaseHandler treeDatabase;
     private int currentDisplayed;
+    private AudioSource aud;
 
 	// Use this for initialization
 	void Start () {
@@ -42,6 +45,7 @@ public class WorldUIScript : MonoBehaviour, ITrackableEventHandler {
 			mTrackableBehaviour.RegisterTrackableEventHandler(this);
 		}
         treeDatabase = GetComponent<TreeDatabaseHandler>();
+        aud = GetComponent<AudioSource>();
         editableTree.SetActive(false);
 
         TreeDatabaseHandler.TreeDestroyed += AdjustIndex;
@@ -99,6 +103,8 @@ public class WorldUIScript : MonoBehaviour, ITrackableEventHandler {
 
 	private void checkTouchHit(RaycastHit hit) {
 		if(hit.transform.gameObject.tag == "Button") {
+            aud.PlayOneShot(clickSound); // Play clicksound
+
             if(currentMenu == 1) // Start to build has been pressed
             {
                 if (hit.transform.gameObject.name == "NextTreeButton")
