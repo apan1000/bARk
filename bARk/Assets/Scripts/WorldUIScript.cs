@@ -103,6 +103,7 @@ public class WorldUIScript : MonoBehaviour, ITrackableEventHandler {
 
 	private void checkTouchHit(RaycastHit hit) {
 		if(hit.transform.gameObject.tag == "Button") {
+            aud.pitch = Random.Range(0.7f, 1f);
             aud.PlayOneShot(clickSound); // Play clicksound
 
             if(currentMenu == 1) // Start to build has been pressed
