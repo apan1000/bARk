@@ -2,6 +2,7 @@
 	Properties {
 		_Type ("Bark Type", Range(0,1)) = 0.0
 		_Noise ("Noise Properties", Vector) = (1, 1, 1, 1)
+		_Noise2("Noise Properties2", Vector) = (1, 1, 1, 1)
 		_Color ("Color", Color) = (1, 1, 1, 1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
@@ -29,23 +30,25 @@
 		half _Glossiness;
 		half _Metallic;
 		fixed4 _Color;
+		float4 _Noise2;
 
 		float3 birch(float3 worldPos) {
 			float3 color;
 
 			float3 samplePos = float3(worldPos.x, worldPos.y * 3, worldPos.z);
-			float noise = snoise(samplePos * _Noise.y) * _Noise.x;
+			//float noise = snoise(samplePos * _Noise.y) * _Noise.x;
+			float noise = snoise(samplePos * 0.04f) * 0.93f;
 
-			if(noise > 0.8f) {
+			if(noise > 0.35f) {
 				color = float3(0, 0, 0);
 			} else {
 				color = float3(1, 1, 1);
 			}
 
-			float3 samplePos2 = float3(worldPos.x, worldPos.y * _Noise.z, worldPos.z);
-			float noise2 = snoise(samplePos2 * 3.31f) * 1.05f;
+			float3 samplePos2 = float3(worldPos.x, worldPos.y * 6.3f, worldPos.z);
+			float noise2 = snoise(samplePos2 * 0.2f) * 0.57f;
 
-			if(noise2 > _Noise.w) {
+			if(noise2 > 0.35f) {
 				color = float3(0, 0, 0);
 			}
 

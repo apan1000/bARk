@@ -180,7 +180,8 @@ Shader "Custom/Oak"
 		float _Persistence;
 		fixed _CellType;
 		fixed _DistanceFunction;
-		float _Displacement;		fixed4 _LowColor;
+		float _Displacement;
+		fixed4 _LowColor;
 		fixed4 _HighColor;
 
 		struct Input 
@@ -196,18 +197,19 @@ Shader "Custom/Oak"
 
 			float3 samplePos = float3(OUT.pos.x, OUT.pos.y, OUT.pos.z);	// Should be changed to match pixel-shader
 			float h = CellNormal(samplePos, _Octaves, _Offset, _Frequency, _Amplitude, _Lacunarity, _Persistence, _CellType, _DistanceFunction);
-			v.vertex.xyz += v.normal * h * _Displacement;
+			//v.vertex.xyz += v.normal * h * _Displacement;
 		}
 
 		void surf (Input IN, inout SurfaceOutput o) 
 		{
 			float3 samplePos = float3(IN.worldPos.x * 3, IN.worldPos.y, IN.worldPos.z * 3);
-			float h = CellNormal(samplePos, _Octaves, _Offset, _Frequency, _Amplitude, _Lacunarity, _Persistence, _CellType, _DistanceFunction);
-			
+			//float h = CellNormal(samplePos, _Octaves, _Offset, _Frequency, _Amplitude, _Lacunarity, _Persistence, _CellType, _DistanceFunction);
+			float h = CellNormal(samplePos, 6, _Offset, 0.05f, 1.1f, 1.01f, 0.78f, 0, 0);
+
 			h = h * 0.5 + 0.5;
 			
 			float4 color;
-			color = lerp(_LowColor, _HighColor, h);
+			color = lerp(_LowColor, fixed4(0.31f, 0.24, 0.2f, 1), h);
 
 			o.Albedo = color.rgb;
 			o.Alpha = 1.0;

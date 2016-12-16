@@ -24,9 +24,21 @@ public class ButtonScript : MonoBehaviour {
 		
 	}
 	
-	public void SetTreeTexture() {
-		treeMaterial.mainTexture = GetComponent<Renderer>().sharedMaterial.mainTexture;
-	}
+	public void SetTreeTexture()
+    {
+        if(gameObject.name == "Birch cylinder")
+        {
+            treeMaterial.shader = GetComponent<Renderer>().sharedMaterial.shader;
+        }
+        else if (gameObject.name == "Oak cylinder")
+        {
+            treeMaterial.shader = GetComponent<Renderer>().sharedMaterial.shader;
+        }
+        else
+        {
+            treeMaterial.mainTexture = GetComponent<Renderer>().sharedMaterial.mainTexture;
+        }
+    }
 
 	public void SetGrowStyle() {
 		treeScript.growthPercent = 0f;

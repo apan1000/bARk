@@ -44,9 +44,16 @@ public class TreeDatabaseHandler : MonoBehaviour
     /// </summary>
     public void SaveTree()
     {
-
-
-        string materialName = treeMaterial.sharedMaterial.mainTexture.name;
+        string materialName;
+        if (treeMaterial.sharedMaterial.mainTexture != null)
+        {
+            materialName = treeMaterial.sharedMaterial.mainTexture.name;
+            
+        }
+        else
+        {
+            materialName = treeMaterial.sharedMaterial.shader.name;
+        }
         database.AddTreeToFirebase(tree.Seed, tree.MaxNumVertices, tree.NumberOfSides, tree.BaseRadius,
            tree.RadiusStep, tree.MinimumRadius, tree.BranchProbability, tree.SegmentLength, tree.Twisting,
            tree.BranchProbability, tree.growthPercent, materialName);
@@ -154,7 +161,8 @@ public class TreeDatabaseHandler : MonoBehaviour
         if (textureName == "bark3") // Oak
         {
             Debug.Log("BARK3");
-            treeR.material.mainTexture = barkTextures[0];
+            treeR.material.shader = Shader.Find("Custom/Oak");
+
         }
         else if (textureName == "bark1") // Rainbow
         {
@@ -164,12 +172,14 @@ public class TreeDatabaseHandler : MonoBehaviour
         else // Birch
         {
             Debug.Log("BIRCH!!!");
-            g.AddComponent<ProceduralBark>();
-            ProceduralBark b = g.GetComponent<ProceduralBark>();
-            b.freq = 0.08f;
-            b.lacunarity = 3.38f;
-            b.gain = -0.78f;
-            b.GenerateTexture();
+            //g.AddComponent<ProceduralBark>();
+            //ProceduralBark b = g.GetComponent<ProceduralBark>();
+            //b.freq = 0.08f;
+            //b.lacunarity = 3.38f;
+            //b.gain = -0.78f;
+            //b.GenerateTexture();
+            treeR.material.shader = Shader.Find("Custom/Birch");
+
         }
         return g;
     }
