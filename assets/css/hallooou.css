@@ -113,6 +113,7 @@ html,
 body {
     width: 100%;
     height: 100%;
+    min-height: 100%;
 }
 
 body {
@@ -922,6 +923,11 @@ video {
 .team-member {
     margin: 15px 0;
     padding: 0;
+}
+
+.team-member > p {
+    margin-bottom: 0;
+    min-height: 58px;
 }
 
 .team-member figure{

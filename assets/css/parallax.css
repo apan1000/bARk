@@ -18,5 +18,6 @@ Version: 1.0
 #products,
 #portfolio,
 #counter{
+    min-height: 100%;
 	background-attachment: fixed;
 }
