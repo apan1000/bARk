@@ -55,7 +55,7 @@ $(function() {
 
         $('#parallax-slide').parallax("50%", 0.1);
         $('#products').parallax("50%", 0.1);
-        $('#portfolio').parallax("50%", 0.1);
+        // $('#portfolio').parallax("50%", 0.1);
         $('#page-aboutus').parallax("50%", 0.1);
     }
 });
@@ -96,7 +96,7 @@ $('.toggle').click(function() {
 // Client testimonials
 $(function() {
 
-    var owl = $(".client-testimonials");
+    var owl = $("#client-testimonials");
 
     owl.owlCarousel({
         navigation: false, // Show next and prev buttons
@@ -111,7 +111,7 @@ $(function() {
 // Client Slider Carousel
 $(function() {
 
-    var owl = $(".client-slider");
+    var owl = $("#technology-slider");
 
     owl.owlCarousel({
         items: 4, //5 items above 1000px browser width
@@ -119,17 +119,17 @@ $(function() {
         itemsDesktopSmall: [900, 3], // betweem 900px and 601px
         itemsTablet: [600, 2], //2 items between 600 and 480
         itemsMobile: [479, 2], //1 item between 480 and 0
-        pagination: false, // Show pagination
+        pagination: true, // Show pagination
         navigation: false // Show navigation
     });
 
 });
 
 
-// Recent Project Carousel
+// Screenshots Carousel
 $(function() {
 
-    var owl = $(".recent-project-carousel");
+    var owl = $("#screenshots-carousel");
 
     owl.owlCarousel({
         items: 3, //5 items above 1000px browser width
@@ -143,10 +143,36 @@ $(function() {
 
 
     // Custom Navigation Events
-    $(".btn-next").on('click', function() {
+    $("#screenshots-next").on('click', function() {
         owl.trigger('owl.next');
     })
-    $(".btn-prev").on('click', function() {
+    $("#screenshots-prev").on('click', function() {
+        owl.trigger('owl.prev');
+    })
+
+});
+
+// Screenshots Carousel
+$(function() {
+
+    var owl = $("#open-house-carousel");
+
+    owl.owlCarousel({
+        items: 3, //5 items above 1000px browser width
+        itemsDesktop: [1024, 4], //4 items between 1000px and 901px
+        itemsDesktopSmall: [900, 2], // betweem 900px and 601px
+        itemsTablet: [600, 2], //2 items between 600 and 480
+        itemsMobile: [479, 1], //1 item between 480 and 0
+        pagination: true, // Show pagination
+        navigation: false // Show navigation
+    });
+
+
+    // Custom Navigation Events
+    $("#open-house-next").on('click', function() {
+        owl.trigger('owl.next');
+    })
+    $("#open-house-prev").on('click', function() {
         owl.trigger('owl.prev');
     })
 
@@ -155,29 +181,29 @@ $(function() {
 
 
 // Counter
-$(function() {
+// $(function() {
 
-    $('.counter-section').on('inview', function(event, visible, visiblePartX, visiblePartY) {
-        if (visible) {
-            $(this).find('.timer').each(function() {
-                var $this = $(this);
-                $({
-                    Counter: 0
-                }).animate({
-                    Counter: $this.text()
-                }, {
-                    duration: 2000,
-                    easing: 'swing',
-                    step: function() {
-                        $this.text(Math.ceil(this.Counter));
-                    }
-                });
-            });
-            $(this).off('inview');
-        }
-    });
+//     $('.counter-section').on('inview', function(event, visible, visiblePartX, visiblePartY) {
+//         if (visible) {
+//             $(this).find('.timer').each(function() {
+//                 var $this = $(this);
+//                 $({
+//                     Counter: 0
+//                 }).animate({
+//                     Counter: $this.text()
+//                 }, {
+//                     duration: 2000,
+//                     easing: 'swing',
+//                     step: function() {
+//                         $this.text(Math.ceil(this.Counter));
+//                     }
+//                 });
+//             });
+//             $(this).off('inview');
+//         }
+//     });
 
-});
+// });
 
 
 // Carousel Slider
@@ -189,27 +215,27 @@ $(function() {
 
 
 // YouTube Player
-$(function() {
-    $(".player").mb_YTPlayer();
+// $(function() {
+//     $(".player").mb_YTPlayer();
 
-    $('#video-play').click(function(event) {
-        event.preventDefault();
-        if ($(this).hasClass('fa-play')) {
-            $('.player').playYTP();
-        } else {
-            $('.player').pauseYTP();
-        }
-        $(this).toggleClass('fa-play fa-pause');
-        return false;
-    });
+//     $('#video-play').click(function(event) {
+//         event.preventDefault();
+//         if ($(this).hasClass('fa-play')) {
+//             $('.player').playYTP();
+//         } else {
+//             $('.player').pauseYTP();
+//         }
+//         $(this).toggleClass('fa-play fa-pause');
+//         return false;
+//     });
 
-    $('#video-volume').click(function(event) {
-        event.preventDefault();
-        $('.player').toggleVolume();
-        $(this).toggleClass('fa-volume-off fa-volume-up');
-        return false;
-    });
-});
+//     $('#video-volume').click(function(event) {
+//         event.preventDefault();
+//         $('.player').toggleVolume();
+//         $(this).toggleClass('fa-volume-off fa-volume-up');
+//         return false;
+//     });
+// });
 
 
 // HTML5 Player
@@ -241,379 +267,58 @@ $(function() {
 });
 
 
-
-// Google map API
-$(function() {
-
-    //set your google maps parameters
-    var latitude = 40.7412541,
-        longitude = -74.0040725,
-        map_zoom = 14;
-
-    //google map custom marker icon - .png fallback for IE11
-    var is_internetExplorer11 = navigator.userAgent.toLowerCase().indexOf('trident') > -1;
-    var marker_url = (is_internetExplorer11) ? 'assets/images/cd-icon-location.png' : 'assets/images/cd-icon-location.svg';
-
-    //define the basic color of your map, plus a value for saturation and brightness
-    var main_color = '#2d313f',
-        saturation_value = -90,
-        brightness_value = 2;
-
-    //we define here the style of the map
-    var style = [{
-            //set saturation for the labels on the map
-            elementType: "labels",
-            stylers: [{
-                saturation: saturation_value
-            }]
-        }, { //poi stands for point of interest - don't show these lables on the map 
-            featureType: "poi",
-            elementType: "labels",
-            stylers: [{
-                visibility: "off"
-            }]
-        }, {
-            //don't show highways lables on the map
-            featureType: 'road.highway',
-            elementType: 'labels',
-            stylers: [{
-                visibility: "off"
-            }]
-        }, {
-            //don't show local road lables on the map
-            featureType: "road.local",
-            elementType: "labels.icon",
-            stylers: [{
-                visibility: "off"
-            }]
-        }, {
-            //don't show arterial road lables on the map
-            featureType: "road.arterial",
-            elementType: "labels.icon",
-            stylers: [{
-                visibility: "off"
-            }]
-        }, {
-            //don't show road lables on the map
-            featureType: "road",
-            elementType: "geometry.stroke",
-            stylers: [{
-                visibility: "off"
-            }]
-        },
-        //style different elements on the map
-        {
-            featureType: "transit",
-            elementType: "geometry.fill",
-            stylers: [{
-                hue: main_color
-            }, {
-                visibility: "on"
-            }, {
-                lightness: brightness_value
-            }, {
-                saturation: saturation_value
-            }]
-        }, {
-            featureType: "poi",
-            elementType: "geometry.fill",
-            stylers: [{
-                hue: main_color
-            }, {
-                visibility: "on"
-            }, {
-                lightness: brightness_value
-            }, {
-                saturation: saturation_value
-            }]
-        }, {
-            featureType: "poi.government",
-            elementType: "geometry.fill",
-            stylers: [{
-                hue: main_color
-            }, {
-                visibility: "on"
-            }, {
-                lightness: brightness_value
-            }, {
-                saturation: saturation_value
-            }]
-        }, {
-            featureType: "poi.sport_complex",
-            elementType: "geometry.fill",
-            stylers: [{
-                hue: main_color
-            }, {
-                visibility: "on"
-            }, {
-                lightness: brightness_value
-            }, {
-                saturation: saturation_value
-            }]
-        }, {
-            featureType: "poi.attraction",
-            elementType: "geometry.fill",
-            stylers: [{
-                hue: main_color
-            }, {
-                visibility: "on"
-            }, {
-                lightness: brightness_value
-            }, {
-                saturation: saturation_value
-            }]
-        }, {
-            featureType: "poi.business",
-            elementType: "geometry.fill",
-            stylers: [{
-                hue: main_color
-            }, {
-                visibility: "on"
-            }, {
-                lightness: brightness_value
-            }, {
-                saturation: saturation_value
-            }]
-        }, {
-            featureType: "transit",
-            elementType: "geometry.fill",
-            stylers: [{
-                hue: main_color
-            }, {
-                visibility: "on"
-            }, {
-                lightness: brightness_value
-            }, {
-                saturation: saturation_value
-            }]
-        }, {
-            featureType: "transit.station",
-            elementType: "geometry.fill",
-            stylers: [{
-                hue: main_color
-            }, {
-                visibility: "on"
-            }, {
-                lightness: brightness_value
-            }, {
-                saturation: saturation_value
-            }]
-        }, {
-            featureType: "landscape",
-            stylers: [{
-                hue: main_color
-            }, {
-                visibility: "on"
-            }, {
-                lightness: brightness_value
-            }, {
-                saturation: saturation_value
-            }]
-
-        }, {
-            featureType: "road",
-            elementType: "geometry.fill",
-            stylers: [{
-                hue: main_color
-            }, {
-                visibility: "on"
-            }, {
-                lightness: brightness_value
-            }, {
-                saturation: saturation_value
-            }]
-        }, {
-            featureType: "road.highway",
-            elementType: "geometry.fill",
-            stylers: [{
-                hue: main_color
-            }, {
-                visibility: "on"
-            }, {
-                lightness: brightness_value
-            }, {
-                saturation: saturation_value
-            }]
-        }, {
-            featureType: "water",
-            elementType: "geometry",
-            stylers: [{
-                hue: main_color
-            }, {
-                visibility: "on"
-            }, {
-                lightness: brightness_value
-            }, {
-                saturation: saturation_value
-            }]
-        }
-    ];
-
-    //set google map options
-    var map_options = {
-            center: new google.maps.LatLng(latitude, longitude),
-            zoom: map_zoom,
-            panControl: false,
-            zoomControl: false,
-            mapTypeControl: false,
-            streetViewControl: false,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            scrollwheel: false,
-            styles: style,
-        }
-        //inizialize the map
-    var map = new google.maps.Map(document.getElementById('google-container'), map_options);
-    //add a custom marker to the map                
-    var marker = new google.maps.Marker({
-        position: new google.maps.LatLng(latitude, longitude),
-        map: map,
-        visible: true,
-        icon: marker_url,
-    });
-
-    //add custom buttons for the zoom-in/zoom-out on the map
-    function CustomZoomControl(controlDiv, map) {
-        //grap the zoom elements from the DOM and insert them in the map 
-        var controlUIzoomIn = document.getElementById('cd-zoom-in'),
-            controlUIzoomOut = document.getElementById('cd-zoom-out');
-        controlDiv.appendChild(controlUIzoomIn);
-        controlDiv.appendChild(controlUIzoomOut);
-
-        // Setup the click event listeners and zoom-in or out according to the clicked element
-        google.maps.event.addDomListener(controlUIzoomIn, 'click', function() {
-            map.setZoom(map.getZoom() + 1)
-        });
-        google.maps.event.addDomListener(controlUIzoomOut, 'click', function() {
-            map.setZoom(map.getZoom() - 1)
-        });
-    }
-
-    var zoomControlDiv = document.createElement('div');
-    var zoomControl = new CustomZoomControl(zoomControlDiv, map);
-
-    //insert the zoom div on the top left of the map
-    map.controls[google.maps.ControlPosition.LEFT_TOP].push(zoomControlDiv);
-
-});
-
-
-
 // Lightbox
 $(function() {
-    $('.popup-gallery').magnificPopup({
-        delegate: '.full-project a',
+     $('#screenshots-carousel').magnificPopup({
+        delegate: 'a',
         type: 'image',
         tLoading: 'Loading image #%curr%...',
-        mainClass: 'mfp-img-mobile',
+        mainClass: 'mfp-with-zoom mfp-img-mobile',
         gallery: {
             enabled: true,
             navigateByImgClick: true,
             preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
         },
         image: {
+            verticalFit: true,
             tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
             titleSrc: function(item) {
-                return item.el.attr('title') + '<small>by Hallooou</small>';
+                return item.el.attr('title') + '<small>by bARk</small>';
             }
-        }
+        },
+        zoom: {
+			enabled: true,
+			duration: 300, // don't foget to change the duration also in CSS
+			opener: function(element) {
+				return element.find('img');
+			}
+		}
     });
 
-});
-
-
-
-// Contact form
-$(function() {
-    // validate contact form on keyup and submit
-    $("#contactForm").validate({
-        rules: {
-            name: {
-                required: true,
-                minlength: 2,
-                lettersonly: true
-            },
-            email: {
-                required: true,
-                minlength: 6,
-                email: true
-            },
-            phone: {
-                required: true,
-                digits: true,
-                minlength: 10,
-                maxlength: 15
-            },
-            message: {
-                required: true,
-                minlength: 6
+    $('#open-house-carousel').magnificPopup({
+        delegate: 'a',
+        type: 'image',
+        tLoading: 'Loading image #%curr%...',
+        mainClass: 'mfp-with-zoom mfp-img-mobile',
+        gallery: {
+            enabled: true,
+            navigateByImgClick: true,
+            preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+        },
+        image: {
+            verticalFit: true,
+            tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
+            titleSrc: function(item) {
+                return item.el.attr('title') + '<small>at <a target="_blank" href="https://www.kth.se/social/course/DH2413/page/agi16-open-house/">AGI16 Open House</a></small>';
             }
         },
-        messages: {
-            name: {
-                required: "Please enter your name",
-                minlength: "Minimum 2 characters",
-                lettersonly: "Only letters please!"
-            },
-            email: {
-                required: "Please enter your email address",
-                minlength: "Minimum 6 characters",
-                email: "That's an invalid email"
-            },
-            phone: {
-                required: "Please enter your phone number",
-                digits: "Only digits (no spaces)",
-                minlength: "Minimum 10 characters",
-                maxlength: "Maximum 15 characters"
-            },
-            message: {
-                required: "Please enter your message",
-                minlength: "Minimum 6 characters"
-            }
-        },
-        success: function(label) {
-            label.addClass("valid").text("Perfect!");
-        },
-        submitHandler: function(element) {
-
-            var ajaxform = $(element),
-                url = ajaxform.attr('action'),
-                type = ajaxform.attr('method'),
-                data = {};
-
-            $(ajaxform).find('[name="submit"]').html('<i class="fa fa-circle-o-notch fa-spin fa-fw"></i> Sending...');
-
-
-            ajaxform.find('[name]').each(function(index, value) {
-                var field = $(this),
-                    name = field.attr('name'),
-                    value = field.val();
-
-                data[name] = value;
-
-            });
-
-            $.ajax({
-                url: url,
-                type: type,
-                data: data,
-                success: function(response) {
-                    if (response.type == 'success') {
-                        $("#contactForm").before("<div class='alert alert-success' role='alert'><a href='#' class='close' data-dismiss='alert'>&times;</a>" + response.text + "</div>");
-                        $(ajaxform).each(function() {
-                            this.reset();
-                            $(this).find('[name="submit"]').html('<i class="fa fa-paper-plane fa-fw"></i> Send');
-                        }).find('.valid').each(function() {
-                            $(this).remove('label.valid');
-                        })
-                    } else if (response.type == 'error') {
-                        $("#contactForm").before("<div class='alert alert-danger' role='alert'><a href='#' class='close' data-dismiss='alert'>&times;</a>" + response.text + "</div>");
-                        $(ajaxform).find('[name="submit"]').html('<i class="fa fa-paper-plane fa-fw"></i> Send');
-                    }
-                }
-            });
-
-            return false;
-        }
+        zoom: {
+			enabled: true,
+			duration: 300, // don't foget to change the duration also in CSS
+			opener: function(element) {
+				return element.find('img');
+			}
+		}
     });
 
 });

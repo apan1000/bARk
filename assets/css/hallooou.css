@@ -576,7 +576,7 @@ blockquote span{
 }
 
 #parallax-slide{
-    background: url(../images/cover-three.jpg) 50% 0 no-repeat;
+    background: url(../images/birch-tree.png) 50% 0 no-repeat;
     -webkit-background-size: cover;
        -moz-background-size: cover;
             background-size: cover;
@@ -733,6 +733,14 @@ video {
     padding: 0;
 }
 
+.about {
+    font-size: 18px;
+}
+
+.about ul {
+    margin-top: -24px;
+}
+
 
 /*      5.3: Services section ("What we do")
 /* ---------------------------------------------- */
@@ -855,11 +863,21 @@ video {
 .features{
     width: 100%;
     background: #222;
-    background: url(../images/features_bg.jpg) 50% 0 no-repeat scroll;
+    background: url(../images/oak-tree.png) 50% 0 no-repeat scroll;
     -webkit-background-size: cover;
        -moz-background-size: cover;
             background-size: cover;
          -o-background-size: cover;
+}
+
+.features-container {
+    color: #fff;
+    font-size: 16px;
+}
+
+.features-container h2,
+.features-container h3{
+    color:#fff;
 }
 
 .features-container p{
@@ -872,7 +890,8 @@ video {
     margin: 0 0 22px 0;
     min-width: 80px;
     color: #fff;
-    background: rgba(254,82,76, 1); /* Primary color, can be changed via colors.css */
+    /*background: rgba(254,82,76, 1); /* Primary color, can be changed via colors.css */
+    background: #33a93c;
     text-align: center;
     border-radius: 50px;
     width: 80px;
@@ -900,7 +919,7 @@ video {
 
 .team-member {
     margin: 15px 0;
-    padding:0;
+    padding: 0;
 }
 
 .team-member figure{
@@ -988,15 +1007,11 @@ video {
 }
 
 .team-member figure:hover img{
-    -webkit-transform: scale(1.1) rotate(1deg) translateY(12px);
-       -moz-transform: scale(1.1) rotate(1deg) translateY(12px);
-         -o-transform: scale(1.1) rotate(1deg) translateY(12px);
-        -ms-transform: scale(1.1) rotate(1deg) translateY(12px);
-            transform: scale(1.1) rotate(1deg) translateY(12px);
-    -webkit-transition: all 0.4s ease-in-out;
-       -moz-transition: all 0.4s ease-in-out;
-         -o-transition: all 0.4s ease-in-out;
-            transition: all 0.4s ease-in-out;
+    -webkit-transform: scale(1.1) rotate(0) translateY(12px);
+       -moz-transform: scale(1.1) rotate(0) translateY(12px);
+         -o-transform: scale(1.1) rotate(0) translateY(12px);
+        -ms-transform: scale(1.1) rotate(0) translateY(12px);
+            transform: scale(1.1) rotate(0) translateY(12px);
 }
 
 
@@ -1005,11 +1020,15 @@ video {
 
 #portfolio{
     background: #222;
-    background: url(../images/portfolio_bg.jpg) 50% 0 no-repeat scroll;
+    background: url(../images/bark_bg.jpg) 50% 0 no-repeat scroll;
     -webkit-background-size: cover;
        -moz-background-size: cover;
             background-size: cover;
          -o-background-size: cover;
+}
+
+#portfolio h2 {
+    color: #fff;
 }
 
 
@@ -1019,13 +1038,20 @@ video {
 }
 
 .recent-project {
+    display: block;
     position: relative;
     overflow: hidden;
     margin: 5px;
 }
+
 .recent-project img {
     width: 100%;
 }
+
+.recent-project a {
+    display: block;
+}
+
 .project-info {
   position: absolute;
   left: 0;
@@ -1036,6 +1062,7 @@ video {
   text-align: center;
 }
 .project-info h3 {
+    color: #cc6733;
     line-height: 18px;
 }
 ul.project-meta {
@@ -1154,7 +1181,7 @@ ul.project-meta{
     position: absolute;
     width: 40px;
     height: 70px;
-    top: 40%;
+    top: 60%;
     margin-top: -40px;
     background: rgba(59,59,59,0.9);
     color: #fff;
@@ -1207,25 +1234,29 @@ ul.project-meta{
     padding: 0;
 }
 
-.client-slider{
+.technology-slider{
     margin: 0 auto;
 }
 
-.client-slider .item:before{
+.technology-slider .item:before{
     content: '';
     display: inline-block;
     text-align: center;
 }
 
-.client-slider .item{
+.technology-slider .item{
     display: inline-block;
     margin:0 auto;
     width: 100%;
     height: 100%;
 }
 
-/* change client logo slider pagination color to white for readibility */
-.client-slider.owl-theme .owl-controls .owl-page span{
+.technology-slider .item a p{
+    font-size: 24px;
+}
+
+/* change technology logo slider pagination color to white for readibility */
+.technology-slider.owl-theme .owl-controls .owl-page span{
     background: rgba(255, 255, 255, .5) !important;
 }
 

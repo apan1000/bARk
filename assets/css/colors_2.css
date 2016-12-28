@@ -71,6 +71,12 @@ blockquote {
     background: #197cd9; /* Primary color */
 }
 
+.full-project {
+    color: #fff;
+    font-size: 18px;
+    text-transform: capitalize;
+}
+
 
 .services-item:before {
     border-bottom-color: #197cd9; /* Primary color */
