@@ -577,10 +577,11 @@ blockquote span{
 
 #parallax-slide{
     background: url(../images/birch-tree.png) 50% 0 no-repeat;
-    -webkit-background-size: cover;
-       -moz-background-size: cover;
-            background-size: cover;
-         -o-background-size: cover;
+    -webkit-background-size: cover !important;
+       -moz-background-size: cover !important;
+            background-size: cover !important;
+         -o-background-size: cover !important;
+    min-height: 100%;
 }
 
 .overlay-detail {
@@ -864,10 +865,11 @@ video {
     width: 100%;
     background: #222;
     background: url(../images/oak-tree.png) 50% 0 no-repeat scroll;
-    -webkit-background-size: cover;
-       -moz-background-size: cover;
-            background-size: cover;
-         -o-background-size: cover;
+    -webkit-background-size: cover !important;
+       -moz-background-size: cover !important;
+            background-size: cover !important;
+         -o-background-size: cover !important;
+    min-height: 100%;
 }
 
 .features-container {
@@ -1181,7 +1183,7 @@ ul.project-meta{
     position: absolute;
     width: 40px;
     height: 70px;
-    top: 60%;
+    top: 54%;
     margin-top: -40px;
     background: rgba(59,59,59,0.9);
     color: #fff;
@@ -1986,14 +1988,5 @@ img::-moz-selection {
 
 body {
     webkit-tap-highlight-color: rgba(254,82,76, .8);
-}
-
-
-
-/* Debug styles (remove before exporting for production)
-/* ---------------------------------------------- */
-
-.debug{
-    border:1px solid #f00;
 }
 

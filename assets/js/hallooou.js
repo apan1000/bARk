@@ -45,20 +45,20 @@ $(function() {
 
 
 // jQuery Parallax. More info here-> https://github.com/IanLunn/jQuery-Parallax
-$(function() {
-    // apply parallax effect only when body has the ".parallax-page" class
-    if ($('body').hasClass('parallax-page')) {
-        //.parallax(xPosition, speedFactor, outerHeight) options:
-        //xPosition - Horizontal position of the element
-        //inertia - speed to move relative to vertical scroll. Example: 0.1 is one tenth the speed of scrolling, 2 is twice the speed of scrolling
-        //outerHeight (true/false) - Whether or not jQuery should use it's outerHeight option to determine when a section is in the viewport
+// $(function() {
+//     // apply parallax effect only when body has the ".parallax-page" class
+//     if ($('body').hasClass('parallax-page')) {
+//         //.parallax(xPosition, speedFactor, outerHeight) options:
+//         //xPosition - Horizontal position of the element
+//         //inertia - speed to move relative to vertical scroll. Example: 0.1 is one tenth the speed of scrolling, 2 is twice the speed of scrolling
+//         //outerHeight (true/false) - Whether or not jQuery should use it's outerHeight option to determine when a section is in the viewport
 
-        $('#parallax-slide').parallax("50%", 0.1);
-        $('#products').parallax("50%", 0.1);
-        // $('#portfolio').parallax("50%", 0.1);
-        $('#page-aboutus').parallax("50%", 0.1);
-    }
-});
+//         $('#parallax-slide').parallax("50%", 0.1);
+//         $('#products').parallax("50%", 0.1);
+//         $('#portfolio').parallax("50%", 0.1);
+//         $('#page-aboutus').parallax("50%", 0.1);
+//     }
+// });
 
 
 // Closes the Responsive Menu on Menu Item Click
@@ -152,7 +152,7 @@ $(function() {
 
 });
 
-// Screenshots Carousel
+// Open House Carousel
 $(function() {
 
     var owl = $("#open-house-carousel");
@@ -209,7 +209,7 @@ $(function() {
 // Carousel Slider
 $(function() {
     $('.carousel').carousel({
-            interval: 8000 //changes the speed
+        interval: 8000 //changes the speed
     })
 });
 
@@ -238,33 +238,33 @@ $(function() {
 // });
 
 
-// HTML5 Player
-$(function() {
+// // HTML5 Player
+// $(function() {
 
-    var vid = $("#html5-video").get(0);
+//     var vid = $("#html5-video").get(0);
 
-    $('#html5-video-play').click(function(event) {
-        event.preventDefault();
-        if (vid.paused) {
-            vid.play();
-        } else {
-            vid.pause();
-        }
-        $(this).toggleClass('fa-play fa-pause');
-        return false;
-    });
+//     $('#html5-video-play').click(function(event) {
+//         event.preventDefault();
+//         if (vid.paused) {
+//             vid.play();
+//         } else {
+//             vid.pause();
+//         }
+//         $(this).toggleClass('fa-play fa-pause');
+//         return false;
+//     });
 
-    $('#html5-video-volume').click(function(event) {
-        event.preventDefault();
-        if (vid.muted) {
-            vid.muted = false;
-        } else {
-            vid.muted = true;
-        }
-        $(this).toggleClass('fa-volume-off fa-volume-up');
-        return false;
-    });
-});
+//     $('#html5-video-volume').click(function(event) {
+//         event.preventDefault();
+//         if (vid.muted) {
+//             vid.muted = false;
+//         } else {
+//             vid.muted = true;
+//         }
+//         $(this).toggleClass('fa-volume-off fa-volume-up');
+//         return false;
+//     });
+// });
 
 
 // Lightbox
