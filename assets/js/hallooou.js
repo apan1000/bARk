@@ -132,7 +132,7 @@ $(function() {
     var owl = $("#screenshots-carousel");
 
     owl.owlCarousel({
-        items: 3, //5 items above 1000px browser width
+        items: 4, //5 items above 1000px browser width
         itemsDesktop: [1024, 4], //4 items between 1000px and 901px
         itemsDesktopSmall: [900, 2], // betweem 900px and 601px
         itemsTablet: [600, 2], //2 items between 600 and 480
@@ -158,7 +158,7 @@ $(function() {
     var owl = $("#open-house-carousel");
 
     owl.owlCarousel({
-        items: 3, //5 items above 1000px browser width
+        items: 4, //5 items above 1000px browser width
         itemsDesktop: [1024, 4], //4 items between 1000px and 901px
         itemsDesktopSmall: [900, 2], // betweem 900px and 601px
         itemsTablet: [600, 2], //2 items between 600 and 480
