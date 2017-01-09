@@ -15,9 +15,18 @@ Version: 1.0
 /* ---------------------------------------------- */
 
 #intro,
-#products,
-#portfolio,
-#counter{
+#portfolio {
     min-height: 100%;
-	background-attachment: fixed;
+    background-position: center center;
+    -webkit-background-size: cover !important;
+       -moz-background-size: cover !important;
+            background-size: cover !important;
+         -o-background-size: cover !important;
+}
+
+@media only screen and (min-width: 992px) {
+    #intro,
+    #portfolio {
+        background-attachment: fixed;
+    }
 }

@@ -140,7 +140,7 @@ h6 {
 }
 
 p {
-    margin: 0 0 25px;
+    margin: 10px 0 35px;
     font-size: 18px;
     line-height: 1.5;
 }
@@ -570,12 +570,8 @@ blockquote span{
 }
 
 #intro {
-    background: url(../images/birch-tree.png) 50% 0 no-repeat;
-    -webkit-background-size: cover !important;
-       -moz-background-size: cover !important;
-            background-size: cover !important;
-         -o-background-size: cover !important;
-    min-height: 100%;
+    background: #222;
+    background: url(../images/birch-tree.png) no-repeat;
 }
 
 .overlay-detail {
@@ -734,6 +730,10 @@ video {
 
 .about ul {
     margin-top: -24px;
+}
+
+.about-text {
+    text-align: left;
 }
 
 
@@ -1021,11 +1021,7 @@ video {
 
 #portfolio{
     background: #222;
-    background: url(../images/bark_bg.jpg) 50% 0 no-repeat scroll;
-    -webkit-background-size: cover;
-       -moz-background-size: cover;
-            background-size: cover;
-         -o-background-size: cover;
+    background: url(../images/bark_bg.jpg) no-repeat;
 }
 
 #portfolio h2 {
@@ -1789,7 +1785,7 @@ footer .social a{
 
 
     p {
-        margin: 0 0 35px;
+        margin: 10px 0 35px;
         font-size: 18px;
         line-height: 1.6;
     }
@@ -1836,9 +1832,10 @@ footer .social a{
 @media(max-width:767px) {
 
     .about,
-    .cta-two-section{
+    .cta-two-section {
         text-align: center;
     }
+
     .carousel-caption {
         top: 30%;
         margin: 0;
