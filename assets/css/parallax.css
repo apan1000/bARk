@@ -15,7 +15,8 @@ Version: 1.0
 /* ---------------------------------------------- */
 
 #intro,
-#portfolio {
+#portfolio,
+#features {
     min-height: 100%;
     background-position: center center;
     -webkit-background-size: cover !important;
@@ -24,9 +25,10 @@ Version: 1.0
          -o-background-size: cover !important;
 }
 
-@media only screen and (min-width: 992px) {
+@media only screen and (min-width: 1025px) {
     #intro,
-    #portfolio {
+    #portfolio,
+    #features {
         background-attachment: fixed;
     }
 }

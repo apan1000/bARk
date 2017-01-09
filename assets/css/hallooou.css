@@ -855,15 +855,10 @@ video {
 /*       5.4: features section ("Why choose us")
 /* ---------------------------------------------- */
 
-.features{
+#features {
     width: 100%;
     background: #222;
-    background: url(../images/oak-tree.png) 50% 0 no-repeat scroll;
-    -webkit-background-size: cover !important;
-       -moz-background-size: cover !important;
-            background-size: cover !important;
-         -o-background-size: cover !important;
-    min-height: 100%;
+    background: url(../images/oak-tree.png) no-repeat;
 }
 
 .features-container {
@@ -872,7 +867,7 @@ video {
 }
 
 .features-container h2,
-.features-container h3{
+.features-container h3 {
     color:#fff;
 }
 
