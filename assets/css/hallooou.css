@@ -1106,6 +1106,23 @@ ul.project-meta li a:hover{
     line-height: 20px;
 }
 
+/* Videos
+/* ---------------------------------------------- */
+.portfolio-video {
+    float: left;
+    text-align: center;
+    width: 50%;
+}
+
+.portfolio-video video {
+    display: inline-block;
+    max-height: 355px;
+}
+
+.portfolio-video figcaption {
+    color: #fff;
+}
+
 /* Overlay and hover effect
 /* ---------------------------------------------- */
 .recent-project::before {
@@ -1701,6 +1718,30 @@ footer .social a{
         text-align: left;
     }
 
+}
+
+/* Media Queries [max-width:991px]
+/* ---------------------------------------------- */
+@media screen and (max-width: 991px) {
+    .portfolio-video {
+        float: left;
+        text-align: center;
+        width: 100%;
+        margin-top: 50px;
+    }
+
+    .portfolio-video video {
+        display: inline-block;
+        max-width: 90%;
+    }
+
+    .portfolio-video figcaption {
+        color: #fff;
+    }
+
+    .portfolio-video p {
+        margin: 10px 0 0;
+    }
 }
 
 

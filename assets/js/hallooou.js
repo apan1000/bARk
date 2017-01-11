@@ -178,6 +178,32 @@ $(function() {
 
 });
 
+// Making-of Carousel
+$(function() {
+
+    var owl = $("#making-of-carousel");
+
+    owl.owlCarousel({
+        items: 4, //5 items above 1000px browser width
+        itemsDesktop: [1024, 4], //4 items between 1000px and 901px
+        itemsDesktopSmall: [900, 2], // betweem 900px and 601px
+        itemsTablet: [600, 2], //2 items between 600 and 480
+        itemsMobile: [479, 1], //1 item between 480 and 0
+        pagination: true, // Show pagination
+        navigation: false // Show navigation
+    });
+
+
+    // Custom Navigation Events
+    $("#making-of-next").on('click', function() {
+        owl.trigger('owl.next');
+    })
+    $("#making-of-prev").on('click', function() {
+        owl.trigger('owl.prev');
+    })
+
+});
+
 
 
 // Counter
@@ -310,6 +336,32 @@ $(function() {
             tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
             titleSrc: function(item) {
                 return item.el.attr('title') + '<small>at <a target="_blank" href="https://www.kth.se/social/course/DH2413/page/agi16-open-house/">AGI16 Open House</a></small>';
+            }
+        },
+        zoom: {
+			enabled: true,
+			duration: 300, // don't foget to change the duration also in CSS
+			opener: function(element) {
+				return element.find('img');
+			}
+		}
+    });
+
+    $('#making-of-carousel').magnificPopup({
+        delegate: 'a',
+        type: 'image',
+        tLoading: 'Loading image #%curr%...',
+        mainClass: 'mfp-with-zoom mfp-img-mobile',
+        gallery: {
+            enabled: true,
+            navigateByImgClick: true,
+            preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+        },
+        image: {
+            verticalFit: true,
+            tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
+            titleSrc: function(item) {
+                return item.el.attr('title') + '<small>Work in progress</small>';
             }
         },
         zoom: {
