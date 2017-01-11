@@ -42,19 +42,15 @@ Version: 1.0
     5.1:    Hero Unit (Main slider)
     5.2:    About section ("About us")
     5.3:    Services section ("What we do")
-    5.4:    features section ("Why choose us")
+    5.4:    Features section ("Why choose us")
     5.5:    Team section 
     5.6:    Portfolio section
     5.7:    Technology section
-    5.8:    Contact section
-6:  Our achievements section
-7:  Call to action section  (one or two columns)
-8:  Call to action section (two columns)
-9:  Clients testimonial
-10: Footer
-11: CSS3 Animations
-12: Buttons
-13: Media queries
+6:  Clients testimonial
+7: Footer
+8: CSS3 Animations
+9: Buttons
+10: Media queries
 
 /*
 ----------------------------------------------------- */
@@ -1257,220 +1253,7 @@ ul.project-meta{
 }
 
 
-/*       5.8: Contact section
-/* ---------------------------------------------- */
-
-.contact-form,
-.contact-address{
-    padding-top: 60px;
-}
-
-.contact-form .form-group{
-    padding: 5px 0;
-    min-height: 100%;
-}
-
-.contact-form .form-group label{
-    font-weight: 600;
-}
-
-.contact-form .form-group button{
-    display: inline-block;
-    min-height: 100%;
-}
-
-.contact-form .form-group input,
-.contact-form .form-group textarea{
-    border-radius: 0;
-    padding: 20px 10px;
-    min-width: 100%;
-    font-size: 16px;
-}
-
-.contact-form .form-group textarea{
-    padding-top: 10px;
-}
-
-
-.contact-form .form-group .btn-default{
-    min-width: 100%;
-}
-
-.contact-form .form-group input[type="email"],
-.contact-form .form-group input[type="phone"],
-.contact-form .form-group input[type="text"] 
-{
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    height: 42px; /* Increase height as required */
-    margin-bottom: 0px;
-    padding: 0 10px; /*  Now only left & right padding */
-
-}
-
-.contact-address ul{
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.contact-address ul li{
-    font-size: 16px;
-}
-
-.contact-address ul li span{
-    font-weight: 600;
-    display: inline-block;
-    min-width: 80px;
-}
-
-.contact-form label.error,
-.contact-form label.error.valid{
-    color:#f00;
-    padding-top: 10px;
-}
-
-.contact-form label.error.valid{
-    color:#018804;
-}
-
-.form-alerts .alert{
-    border-radius: 0;
-    border: 0;
-}
-
-
-.form-alerts .alert.alert-success,
-.form-alerts .alert.alert-danger{
-    color: #fff;
-    background: #85ceab;
-}
-
-.form-alerts .alert.alert-danger{
-    background: #fe8080;
-}
-
-
-/* Google Map
-/* ---------------------------------------------- */
-#google-container {
-  position: relative;
-  min-width: 100%;
-  min-height: 400px;
-  background-color: #e7eaf0;
-}
-
-#cd-google-map {
-  position: relative;
-  padding: 20px 0;
-}
-
-#cd-zoom-in, #cd-zoom-out {
-  height: 32px;
-  width: 32px;
-  cursor: pointer;
-  margin-left: 10px;
-  background-color: rgba(254,82,76, 0.9); /* Primary color, can be changed via colors.css */
-  background-repeat: no-repeat;
-  background-size: 32px 64px;
-  background-image: url("../images/cd-icon-controller.svg");
-}
-.no-touch #cd-zoom-in:hover, .no-touch #cd-zoom-out:hover {
-  background-color: #d36868;
-}
-
-#cd-zoom-in {
-  background-position: 50% 0;
-  margin-top: 10px;
-  margin-bottom: 1px;
-}
-
-#cd-zoom-out {
-  background-position: 50% -32px;
-}
-
-
-/* 6:   Our achievements section
-/* ---------------------------------------------- */
-
-.counter-section {
-    text-align: center;
-    background: url(../images/counter_bg.jpg) 50% 0 no-repeat scroll;
-    -webkit-background-size: cover;
-       -moz-background-size: cover;
-            background-size: cover;
-         -o-background-size: cover;
-}
-
-.counter-section strong {
-    display: block;
-    font-weight: 600;
-    font-size: 60px;
-    line-height: 48px;
-    color: #fff;
-}
-span.count-description {
-    display: block;
-    color: #fff;
-    font-size: 20px;
-    line-height: 40px;
-    text-transform: capitalize;
-    padding-top: 10px;
-}
-
-.counter-wrap{
-    padding:50px 0;
-
-}
-
-.counter-section .alternate{
-   background-color: rgba(254,82,76, .2);
-}
-
-
-/* 7.   Call to action section  (one or two columns)
-/* ---------------------------------------------- */
-
-
-
-
-
-/* 8.   Call to action section (two columns)
-/* ---------------------------------------------- */
-
-.cta-two-section{
-    width: 100%;
-    margin:0;
-    padding: 50px 0;
-    background: rgba(254,82,76, 1); /* Primary color, can be changed via colors.css */
-    -webkit-box-shadow: 0 0 10px 2px rgba(0,0,0,.1);
-       -moz-box-shadow: 0 0 10px 2px rgba(0,0,0,.1);
-            box-shadow: 0 0 10px 2px rgba(0,0,0,.1);
-}
-
-.cta-two-section h3{
-    font-size: 25px;
-    line-height: 20px;
-    font-weight: 900;
-    color: #fff;
-    margin-bottom: 2px;
-}
-
-.cta-two-section p {
-    font-size: 18px;
-    line-height: 27px;
-    font-weight: 100;
-    margin: 0px;
-    color: #fff;
-}
-
-.cta-two-section .btn{
-    margin: 0;
-}
-
-
-/* 9:   Client testimonials section
+/* 6:   Client testimonials section
 /* ---------------------------------------------- */
 
 .testimonials h1{
@@ -1540,7 +1323,7 @@ span.count-description {
 }
 
 
-/* 10.  Footer
+/* 7.  Footer
 /* ---------------------------------------------- */
 
 footer {
@@ -1629,7 +1412,7 @@ footer .social a{
 
 
 
-/* 11.  CSS3 Animations
+/* 8.  CSS3 Animations
 /* ---------------------------------------------- */
 
 /* Hero unit mouse animation */
@@ -1682,7 +1465,7 @@ footer .social a{
 }
 
 
-/* 12:  Buttons
+/* 9:  Buttons
 /* ---------------------------------------------- */
 
 .btn {
@@ -1757,7 +1540,7 @@ footer .social a{
 
 
 
-/* 14:  MEDIA QUERIES START
+/* 10:  MEDIA QUERIES START
 /* ---------------------------------------------- */
 
 
@@ -1867,10 +1650,6 @@ footer .social a{
         color: #fff;
     }
 
-    .video-section{
-        background: url(../images/youtube-video-cover.jpg) no-repeat bottom center scroll;
-    }
-
 
     .button_container span,
     .button_container span {
@@ -1898,25 +1677,6 @@ footer .social a{
         font-size: 25px;
     }
 
-}
-
-/* Media Queries [max-device-width:800px] - Fix for HTML5 videos on mobile devices
-/* ---------------------------------------------- */
-@media screen and (max-device-width: 800px) {
-    /*body {
-        background: url(../images/youtube-video-cover.jpg) #000 no-repeat center center fixed;
-    }*/
-    .html5-video-container{
-        background: url(../images/typing-on-mac.jpg) no-repeat bottom center scroll;
-    -webkit-background-size: cover;
-       -moz-background-size: cover;
-            background-size: cover;
-         -o-background-size: cover;
-        background-attachment: fixed;
-    }
-    #bgvid{
-        display: none;
-    }
 }
 
 
